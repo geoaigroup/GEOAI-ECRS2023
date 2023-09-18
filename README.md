@@ -1,4 +1,4 @@
-# Leveraging AI for Environmental Sciences
+# Aerial SAM  
 
 [![Conference](https://img.shields.io/badge/ECRS-Conference-brightgreen)](https://ecrs2023.sciforum.net/)
 [![Workshop](https://img.shields.io/badge/NOAA%20Workshop-5th%20AI%20Demo-blue)](https://noaaai2023.sched.com/)
