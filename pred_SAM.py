@@ -33,9 +33,9 @@ class SAM:
                     {
                         "image": x,
                         "original_size": image.shape[:2],
-                        #'point_coords':input_point,
-                        #'point_labels':input_label,
-                        'boxes':input_boxes,
+                        'point_coords':input_point,
+                        'point_labels':input_label,
+                        # 'boxes':input_boxes,
                         #'mask_inputs':mask_input
                     }
                 ],

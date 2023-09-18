@@ -113,7 +113,7 @@ class cal_scores:
         self.output_dir=output_dir
         self.score_dir=score_dir
 
-    def micro_match_iou(self,pred_mask, name, gt, score_list, image, tile_boxes,geo,transform=None):
+    def micro_match_iou(self,pred_mask, name, gt, score_list, image,input_point,input_label,tile_boxes,geo,transform=None):
         pred_tile = []
         gt_tile = []
         msk = pred_mask.int()
@@ -169,7 +169,8 @@ class cal_scores:
         plt.figure(figsize=(10, 10))
         plt.imshow(image)
         utils.show_mask(mask_tile, plt.gca(), random_color=False)
-        # show_points(input_point.cpu(), input_label.cpu(), plt.gca())
+        if not input_point==None:
+          utils.show_points(input_point.cpu(), input_label.cpu(), plt.gca())
         for box in tile_boxes:
             utils.show_box(box,plt.gca())
         # for box in tile_boxes:
