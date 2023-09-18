@@ -3,11 +3,11 @@
 [![Conference](https://img.shields.io/badge/ECRS-Conference-brightgreen)](https://ecrs2023.sciforum.net/)
 [![Workshop](https://img.shields.io/badge/NOAA%20Workshop-5th%20AI%20Demo-blue)](https://noaaai2023.sched.com/)
 
-Welcome to the official repository for our paper titled "Zero-Shot Refinement of Buildings’ Segmentation Models using SAM" presented at the 5th NOAA Workshop on Leveraging AI in Environmental Sciences and submitted to the The 5th International Electronic Conference on Remote Sensing.
+Welcome to the official repository for our paper titled "Zero-Shot Refinement of Buildings’ Segmentation Models using SAM" to appear at the 5th International Electronic Conference on Remote Sensing (ECRS 2023).
 
 ## Overview
 
-This repository contains the code and resources used to produce the results presented in our paper. Our research focuses on  a zero-shot refinement approach where the inference results of a CNN trained for buildings' segmentation from remote sensing images are passed as input to SAM.
+Our research focuses on  a zero-shot refinement approach where the inference results of a CNN trained for buildings' segmentation from remote sensing images are passed as input to SAM. This repository contains the code and resources used to produce the results presented in our paper. Also, this repo hosts materail for our live demo entitled "Zero-Shot Buildings' Segmentation using SAM" at the 5th NOAA Workshop on Leveraging AI in Environmental Sciences.
 
 ## Key Features
 
