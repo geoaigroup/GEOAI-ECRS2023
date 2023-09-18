@@ -250,9 +250,10 @@ class cal_scores:
         total_recall = np.mean(np.array(all_recall))
 
         # print("Mean iou score of all buildings in all tiles:", total_iou)
-        print("Mean F1 score of all buildings in all tiles:", total_f1)
+        # print("Mean F1 score of all buildings in all tiles:", total_f1)
         # print("Mean tp iou score of all buildings in all tiles:", total_tpiou)
-        print("Mean tp f1 score of all buildings in all tiles:", total_tpf1)
+        # print("Mean tp f1 score of all buildings in all tiles:", total_tpf1)
+        print("Mean F1 score of all buildings in all tiles:", total_tpf1)
         print("Mean precision  of all buildings in all tiles:", total_precision)
         print("Mean recall of all buildings in all tiles:", total_recall)
 
