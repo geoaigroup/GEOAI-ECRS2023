@@ -6,7 +6,7 @@ import geopandas as gpd
 import os
 import json
 import glob
-import utils
+from buildingsSAM import utils
 import pandas as pd
 
 def iou_numpy(outputs, labels):
