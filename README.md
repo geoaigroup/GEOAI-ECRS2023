@@ -18,6 +18,6 @@ Our research focuses on  a zero-shot refinement approach where the inference res
   - *Coming Soon!* Our reproducible code will be made available once our paper is submitted. Anticipate the release!
 
 - A comprehensive Colab notebook for a live demo presented at the 5th NOAA Workshop.
-  - This notebook contains an demo of the implementation of two CNNs acting as prompt generators for [SAM](https://github.com/facebookresearch/segment-anything) on remote sensing data.
+  - This notebook contains a demo of the implementation of two CNNs acting as prompt generators for [SAM](https://github.com/facebookresearch/segment-anything) on remote sensing data.
   - It also includes the use of [LangSAM](https://github.com/luca-medeiros/lang-segment-anything), an innovative integration of two powerful models: the foundation model [SAM](https://github.com/facebookresearch/segment-anything) and the visual grounding model [Grounding Dino]( https://github.com/IDEA-Research/GroundingDINO). This combination enables the use of textual prompts with SAM on remote sensing data.
 
