@@ -4,14 +4,7 @@
 [![Workshop](https://img.shields.io/badge/NOAA%20Workshop-5th%20AI%20Demo-blue)](https://noaaai2023.sched.com/)
 
 Welcome to the official repository for our paper titled "Zero-Shot Refinement of Buildings’ Segmentation Models using SAM" to appear at the 5th International Electronic Conference on Remote Sensing (ECRS 2023).
-Paper: @misc{mayladan2023zeroshot,
-      title={Zero-Shot Refinement of Buildings' Segmentation Models using SAM}, 
-      author={Ali Mayladan and Hasan Nasrallah and Hasan Moughnieh and Mustafa Shukor and Ali J. Ghandour},
-      year={2023},
-      eprint={2310.01845},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
+Paper: https://arxiv.org/abs/2310.01845
 ## Overview
 ![CNN_SAM_model](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/b2f6f42c-69ff-47b7-81c2-448d5c1fc85e)
 
@@ -36,3 +29,11 @@ Single Point          |          Skeleton Points          |          Bounding Bo
   - This notebook contains a demo of the implementation of two CNNs acting as prompt generators for [SAM](https://github.com/facebookresearch/segment-anything) on remote sensing data.
   - It also includes the use of [LangSAM](https://github.com/luca-medeiros/lang-segment-anything), an innovative integration of two powerful models: the foundation model [SAM](https://github.com/facebookresearch/segment-anything) and the visual grounding model [Grounding Dino]( https://github.com/IDEA-Research/GroundingDINO). This combination enables the use of textual prompts with SAM on remote sensing data.
 
+Citation: @misc{mayladan2023zeroshot,
+      title={Zero-Shot Refinement of Buildings' Segmentation Models using SAM}, 
+      author={Ali Mayladan and Hasan Nasrallah and Hasan Moughnieh and Mustafa Shukor and Ali J. Ghandour},
+      year={2023},
+      eprint={2310.01845},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
