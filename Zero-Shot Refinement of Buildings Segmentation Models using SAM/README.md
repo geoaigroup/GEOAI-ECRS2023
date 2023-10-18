@@ -14,13 +14,13 @@ Our research focuses on  a zero-shot refinement approach where the inference res
 
 
 ##Some visual results
-Solarized dark             |  Solarized Ocean          
-:-------------------------:|:-------------------------:
-![2_52](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/3427e084-0668-4641-bfb5-eb0fccb47529)   |  ![2_54](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/51021610-b256-46e8-8083-4c1ab351a835)
+Single Point | Solarized dark             |  Solarized Ocean          
+-------------------------:|:-------------------------:|:-------------------------:
+![2_550](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/06fd6fcf-c757-4fd6-aabc-7f7ddd28e97d)    |  ![2_52](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/3427e084-0668-4641-bfb5-eb0fccb47529)   |  ![2_54](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/51021610-b256-46e8-8083-4c1ab351a835)
 
 
 
-![2_550](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/06fd6fcf-c757-4fd6-aabc-7f7ddd28e97d)
+
 ## Key Features
 
 - AI models Implementation for building segmentation in remote sensing.
