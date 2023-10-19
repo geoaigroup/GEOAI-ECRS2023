@@ -24,7 +24,7 @@ Same packages and libraries as Segment anything model [SAM](https://github.com/f
 
 ## Getting Started
 Our code is designed to have predicted results of CNN model as shapefiles, and also it can be adjusted to have another input type.
-First you can adjust paths of source images, predicted results of CNN model and output prediction in the path cell as illustrated:
+First you can adjust paths of source images, predicted results of CNN model and output prediction in the path cell as illustrated:    
 
 ```
 # Paths
@@ -45,7 +45,7 @@ For the CNN model choose either *multiclassUnet* (Multiclass Unet CNN model) or 
 
 For prompt type you can choose one of these prompts 
 
-[single point,single + negative,skeleton,multiple points,multiple points + single point,multiple points + negative points,box,box + single point,box + multiple points]
+["**single point**", "**single + negative**", "**skeleton**", "**multiple points**", "**multiple points + single point**", "**multiple points + negative points**", "**box**", "**box + single point**", "**box + multiple points**"]
 
 Example:
 ```
