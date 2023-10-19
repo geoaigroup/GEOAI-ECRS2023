@@ -52,7 +52,7 @@ For the CNN model choose either *multiclassUnet* (Multiclass Unet CNN model) or 
 
 For prompt type you can choose one of these prompts 
 
-["**single point**", "**single + negative**", "**skeleton**", "**multiple points**", "**multiple points + single point**", "**multiple points + negative points**", "**box**", "**box + single point**", "**box + multiple points**"]
+["**single point**", "**single + negative points**", "**skeleton**", "**multiple points**", "**multiple points + single point**", "**multiple points + negative points**", "**box**", "**box + single point**", "**box + multiple points**"]
 
 ```
 main(CNN="multiclassUnet",prompt_type="single point",sam=sam)
