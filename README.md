@@ -29,16 +29,19 @@ A. Mayladan, H. Nasrallah, H. Moughnieh, M. Shukor and A. J. Ghandour, “Zero-S
 
 ## [Extending GradCam-based XAI methods for Remote Sensing Imagery Segmentation](https://geogroup.ai/publication/2023ecrs_camentropy/2023ECRS_CAMEntropy.pdf)
 
+![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/3e224412-9ac5-47f9-8917-95fc74ac5ab6)
 
+This paper offers to bridge this gap by adapting the recent XAI classification algorithms and making them usable for muti-class image segmentation, where we mainly focus on buildings’ segmentation from high-resolution satellite images. To benchmark and compare the performance of the proposed approaches, we introduce a new XAI evaluation methodology and metric based on "Entropy" to measure the model uncertainty.
 
 ### Citation
 ```
 A. GIZZINI, M. Shukor and A. J. Ghandour, “Extending GradCam-based XAI methods for Remote Sensing Imagery Segmentation”, in 5th International Electronic Conference on Remote Sensing, Nov 17 - Nov 21, 2023.  
 ```
 
-
 ## [Trainable Noise Model as an XAI evaluation method: application on Sobol for remote sensing image segmentation](https://geogroup.ai/publication/2023ecrs_noisesobol/2023ECRS_NoiseSobol.pdf)
+![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a0dca1a-989d-4c44-9bab-edb742d0b51a)
 
+This paper adapts the recent gradient-free Sobol XAI method for semantic segmentation. To measure the performance of the Sobol method for segmentation, we propose a quantitative XAI evaluation method based on a learnable noise model. The main objective of this model is to induce noise on the explanation maps, where higher induced noise signifies low accuracy and vice versa. 
 
 ### Citation
 ```
