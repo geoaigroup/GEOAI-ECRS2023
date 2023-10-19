@@ -26,7 +26,8 @@ Single Point          |          Skeleton Points          |          Bounding Bo
 Same packages and libraries as Segment anything model [SAM](https://github.com/facebookresearch/segment-anything) 
 
 ## Getting Started
-Our code is designed to have predicted results of CNN model as shapefiles, and also it can be adjusted to have another input type.
+
+Our code is structured to get predicted results from the CNN model in the form of shapefiles. Additionally, it is adaptable to accommodate various input types as needed.
 
 For a quick testing demo, you can download [data.zip](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources/data.zip) and [pred_shapefile.zip](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources/pred_shapefile.zip) in the [resources](https://github.com/geoaigroup/GEOAI-ECRS2023/tree/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources) directory.
 
