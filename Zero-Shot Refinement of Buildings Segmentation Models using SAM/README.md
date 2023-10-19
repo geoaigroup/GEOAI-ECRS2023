@@ -21,6 +21,21 @@ Single Point          |          Skeleton Points          |          Bounding Bo
 
 ## Installation 
 Same packages and libraries as Segment anything model [SAM](https://github.com/facebookresearch/segment-anything) 
+
+## Getting Started
+Our code is designed to have predicted results of CNN model as shapefiles, and also it can be adjusted to have another input type.
+First you can adjust paths of source images, predicted results of CNN model and output prediction in the path cell as illustrated:
+
+```
+# Paths
+images = "data/images"
+orig_shp="data/orig_shp"
+skeleton_points="data/points.json"
+cent_shp="data/center_points"
+pred = "pred_shapefile"
+output_dir = "data/MulticlassUnet_box_output"
+score_dir = "data/MulticlassUnet_box_scores"
+```
 ## Key Features
 
 - AI models Implementation for building segmentation in remote sensing.
