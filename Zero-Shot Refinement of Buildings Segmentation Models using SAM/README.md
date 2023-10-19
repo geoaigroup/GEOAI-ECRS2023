@@ -32,10 +32,11 @@ images = "data/images"
 orig_shp="data/orig_shp"
 skeleton_points="data/points.json"
 cent_shp="data/center_points"
-pred = "pred_shapefile"
+pred = "data/pred_shapefile"
 output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
 ```
+
 ## Key Features
 
 - AI models Implementation for building segmentation in remote sensing.
@@ -45,7 +46,9 @@ score_dir = "data/MulticlassUnet_box_scores"
   - This notebook contains a demo of the implementation of two CNNs acting as prompt generators for [SAM](https://github.com/facebookresearch/segment-anything) on remote sensing data.
   - It also includes the use of [LangSAM](https://github.com/luca-medeiros/lang-segment-anything), an innovative integration of two powerful models: the foundation model [SAM](https://github.com/facebookresearch/segment-anything) and the visual grounding model [Grounding Dino]( https://github.com/IDEA-Research/GroundingDINO). This combination enables the use of textual prompts with SAM on remote sensing data.
 
-Citation: @misc{mayladan2023zeroshot,
+## Citation:
+```
+@misc{mayladan2023zeroshot,
       title={Zero-Shot Refinement of Buildings' Segmentation Models using SAM}, 
       author={Ali Mayladan and Hasan Nasrallah and Hasan Moughnieh and Mustafa Shukor and Ali J. Ghandour},
       year={2023},
@@ -53,3 +56,4 @@ Citation: @misc{mayladan2023zeroshot,
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
+```
