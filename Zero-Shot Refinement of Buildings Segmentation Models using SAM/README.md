@@ -27,7 +27,10 @@ Same packages and libraries as Segment anything model [SAM](https://github.com/f
 
 ## Getting Started
 Our code is designed to have predicted results of CNN model as shapefiles, and also it can be adjusted to have another input type.
-First you can adjust paths of source images, predicted results of CNN model and output prediction in the path cell as illustrated:    
+
+For a quick testing demo, you can download [data.zip](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources/data.zip) and [pred_shapefile.zip](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources/pred_shapefile.zip) in the [resources](https://github.com/geoaigroup/GEOAI-ECRS2023/tree/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources) directory.
+
+For full data testing you can adjust paths of source images, predicted results of CNN model and output prediction in the path cell:    
 
 ```
 # Paths
@@ -35,7 +38,7 @@ images = "data/images"
 orig_shp= "data/orig_shp"
 skeleton_points= "data/points.json"
 cent_shp= "data/center_points"
-pred = "data/pred_shapefile"
+pred = "pred_shapefile"
 output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
 ```
@@ -56,7 +59,7 @@ main(CNN="multiclassUnet",prompt_type="single point",sam=sam)
 
 ```
 
-## Dataset
+## Datasets
 
 -[WHU Buildings dataset](http://gpcv.whu.edu.cn/data/building_dataset.html) 
 
