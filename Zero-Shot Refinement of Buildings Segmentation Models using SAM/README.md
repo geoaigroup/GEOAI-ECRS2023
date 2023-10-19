@@ -47,6 +47,7 @@ score_dir = "data/MulticlassUnet_box_scores"
   - It also includes the use of [LangSAM](https://github.com/luca-medeiros/lang-segment-anything), an innovative integration of two powerful models: the foundation model [SAM](https://github.com/facebookresearch/segment-anything) and the visual grounding model [Grounding Dino]( https://github.com/IDEA-Research/GroundingDINO). This combination enables the use of textual prompts with SAM on remote sensing data.
 
 ## Citation:
+
 ```
 @misc{mayladan2023zeroshot,
       title={Zero-Shot Refinement of Buildings' Segmentation Models using SAM}, 
