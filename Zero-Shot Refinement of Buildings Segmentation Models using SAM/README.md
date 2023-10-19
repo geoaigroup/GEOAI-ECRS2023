@@ -29,9 +29,9 @@ First you can adjust paths of source images, predicted results of CNN model and 
 ```
 # Paths
 images = "data/images"
-orig_shp="data/orig_shp"
-skeleton_points="data/points.json"
-cent_shp="data/center_points"
+orig_shp= "data/orig_shp"
+skeleton_points= "data/points.json"
+cent_shp= "data/center_points"
 pred = "data/pred_shapefile"
 output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
