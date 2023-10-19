@@ -2,14 +2,13 @@ import sys
 import gc
 class SAM:
    
-    def __init__(self):
+    def __init__(self,checkpoint):
         import sys
         sys.path.append("..")
         from segment_anything import sam_model_registry
-        sam_checkpoint = "sam_vit_h_4b8939.pth"
         model_type = "vit_h"
         device = "cuda"
-        self.sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
+        self.sam = sam_model_registry[model_type](checkpoint=checkpoint)
         self.sam.to(device=device)
 
     def predictSAM(self,x,image,input_point=None,input_label=None,input_boxes=None,mask_input=None,flag=0):
@@ -19,10 +18,7 @@ class SAM:
                     {
                         "image": x,
                         "original_size": image.shape[:2],
-                        #'point_coords':input_point,
-                        #'point_labels':input_label,
-                        'boxes':input_boxes,
-                        #'mask_inputs':mask_input
+                        'boxes':input_boxes,     
                     }
                 ],
                 multimask_output=False,
@@ -35,8 +31,8 @@ class SAM:
                         "original_size": image.shape[:2],
                         'point_coords':input_point,
                         'point_labels':input_label,
-                        # 'boxes':input_boxes,
-                        #'mask_inputs':mask_input
+                        'boxes':input_boxes
+                        # 'mask_inputs':mask_input
                     }
                 ],
                 multimask_output=False,

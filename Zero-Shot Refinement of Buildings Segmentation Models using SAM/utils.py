@@ -144,7 +144,7 @@ def generate_out_negative_points(geo):
 
             for box in bounding_boxes:
                 area=_getArea(box)
-                print("box",box)
+                
                 if area >= 262000:
                     a1=0
                     a2=0
@@ -271,8 +271,29 @@ def create_list_points(geo,name,flag=""):
                         all_points[index].append(in_p[index])
                         all_labels[index].append(in_l[index])
 
-
-
                 all_points=torch.from_numpy(np.array(all_points)).cuda()
                 all_labels=torch.from_numpy(np.array(all_labels)).cuda()
                 return all_points,all_labels
+
+
+def extract_rep_points(data,new_data):
+    os.makedirs(f"{new_data}",exist_ok=True)
+    for i in os.listdir(data):
+        for j in os.listdir(f'{data}/{i}'):
+            sh=j.split('.')[0]
+            if glob.glob(new_data+"/"+sh):
+                continue
+            # GeoDataFrame creation
+            poly = gpd.read_file(f"{data}/{i}/{sh}.shp")
+            # copy poly to new GeoDataFrame
+            points = poly.copy()
+            # change the geometry
+            #points.geometry = points['geometry'].centroid
+            points.geometry = points['geometry'].representative_point()
+
+            # same crs
+            points.crs =poly.crs
+            
+            os.makedirs(f"{new_data}/{sh}",exist_ok=True)
+            points.to_file(f'{new_data}/{sh}/{sh}.shp')    
+    
