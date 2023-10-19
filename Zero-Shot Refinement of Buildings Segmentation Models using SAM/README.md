@@ -4,14 +4,17 @@
 [![Workshop](https://img.shields.io/badge/NOAA%20Workshop-5th%20AI%20Demo-blue)](https://noaaai2023.sched.com/)
 
 Welcome to the official repository for our paper titled "Zero-Shot Refinement of Buildings’ Segmentation Models using SAM" to appear at the 5th International Electronic Conference on Remote Sensing (ECRS 2023).
-Paper: https://arxiv.org/abs/2310.01845
+Paper: [arXiv](https://arxiv.org/abs/2310.01845)
 ## Overview
 ![CNN_SAM_model](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/b2f6f42c-69ff-47b7-81c2-448d5c1fc85e)
 
 Our research focuses on  a zero-shot refinement approach where the inference results of a CNN trained for buildings' segmentation from remote sensing images are passed as input to SAM. This repository contains the code and resources used to reproduce the results presented in our paper. Also, this repo hosts related materials for our live demo entitled "Zero-Shot Buildings' Segmentation using SAM" at the 5th NOAA Workshop on Leveraging AI in Environmental Sciences.
 
+## Key Features
 
-
+- A comprehensive Colab notebook for a live demo presented at the 5th NOAA AI Workshop.
+  - This notebook contains a demo of the implementation of two CNNs acting as prompt generators for [SAM](https://github.com/facebookresearch/segment-anything) on remote sensing data.
+  - It also includes the use of [LangSAM](https://github.com/luca-medeiros/lang-segment-anything), an innovative integration of two powerful models: the foundation model [SAM](https://github.com/facebookresearch/segment-anything) and the visual grounding model [Grounding Dino]( https://github.com/IDEA-Research/GroundingDINO). This combination enables the use of textual prompts with SAM on remote sensing data.
 
 ## Some visual results
 
@@ -39,6 +42,7 @@ score_dir = "data/MulticlassUnet_box_scores"
 The second step is calculating scores of the predicted results from the CNN model using our matching algorithim in the [evaluate](evaluate.py) file in order to compare them with our model's prediction scores.
 We used [vit_h](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth) SAM model checkpoint in this approach, you can change it to another models in the [pred_SAM](pred_SAM.py) file.
 
+## Implementation
 To run our approach prediction you need to run main function and you can change arguments in order to select specific CNN model and select specific prompt type:
 
 For the CNN model choose either *multiclassUnet* (Multiclass Unet CNN model) or *DCNN* (Dlink-Net CNN model).
@@ -47,20 +51,15 @@ For prompt type you can choose one of these prompts
 
 ["**single point**", "**single + negative**", "**skeleton**", "**multiple points**", "**multiple points + single point**", "**multiple points + negative points**", "**box**", "**box + single point**", "**box + multiple points**"]
 
-Example:
 ```
 main(CNN="multiclassUnet",prompt_type="single point",sam=sam)
 
 ```
-## Key Features
 
-- AI models Implementation for building segmentation in remote sensing.
-  - *Coming Soon!* Stay tuned!
-  
-- A comprehensive Colab notebook for a live demo presented at the 5th NOAA AI Workshop.
-  - This notebook contains a demo of the implementation of two CNNs acting as prompt generators for [SAM](https://github.com/facebookresearch/segment-anything) on remote sensing data.
-  - It also includes the use of [LangSAM](https://github.com/luca-medeiros/lang-segment-anything), an innovative integration of two powerful models: the foundation model [SAM](https://github.com/facebookresearch/segment-anything) and the visual grounding model [Grounding Dino]( https://github.com/IDEA-Research/GroundingDINO). This combination enables the use of textual prompts with SAM on remote sensing data.
-
+## Dataset
+-[WHU Buildings dataset](http://gpcv.whu.edu.cn/data/building_dataset.html) 
+-[Massachusetts Buildings dataset](https://www.cs.toronto.edu/~vmnih/data/)
+-[AICrowd Mapping Challenge dataset](https://www.aicrowd.com/challenges/mapping-challenge#datasets)
 ## Citation:
 
 ```
