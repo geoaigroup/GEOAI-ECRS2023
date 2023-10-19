@@ -37,7 +37,6 @@ For full data testing you can adjust paths of source images, predicted results o
 images = "data/images"
 orig_shp= "data/orig_shp"
 skeleton_points= "data/points.json"
-cent_shp= "data/center_points"
 pred = "pred_shapefile"
 output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
