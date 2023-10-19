@@ -36,7 +36,7 @@ pred = "data/pred_shapefile"
 output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
 ```
-
+The second step is calculating scores of the predicted results from the CNN model using our matching algorithim in the [evaluate](evaluate.py) file 
 ## Key Features
 
 - AI models Implementation for building segmentation in remote sensing.
