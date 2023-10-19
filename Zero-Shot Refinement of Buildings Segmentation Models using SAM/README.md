@@ -30,7 +30,7 @@ Our code is designed to have predicted results of CNN model as shapefiles, and a
 
 For a quick testing demo, you can download [data.zip](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources/data.zip) and [pred_shapefile.zip](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources/pred_shapefile.zip) in the [resources](https://github.com/geoaigroup/GEOAI-ECRS2023/tree/main/Zero-Shot%20Refinement%20of%20Buildings%20Segmentation%20Models%20using%20SAM/resources) directory.
 
-For full data testing you can adjust paths of source images, predicted results of CNN model and output prediction in the path cell:    
+For full data testing you can adjust paths of source images, predicted results of CNN model and output prediction in the paths cell:    
 
 ```
 # Paths
@@ -42,7 +42,7 @@ output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
 ```
 The second step is calculating scores of the predicted results from the CNN model using our matching algorithim in the [evaluate](evaluate.py) file in order to compare them with our model's prediction scores.
-We used [vit_h](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth) SAM model checkpoint in this approach, you can change it to another models in the [pred_SAM](pred_SAM.py) file.
+We used [vit_h](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth) SAM model checkpoint in this approach, you can change it to another model in the [pred_SAM](pred_SAM.py) file.
 
 ## Implementation
 To run our approach prediction you need to run main function and you can change arguments in order to select specific CNN model and select specific prompt type:
