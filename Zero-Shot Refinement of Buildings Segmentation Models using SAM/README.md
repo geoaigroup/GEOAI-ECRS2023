@@ -36,7 +36,17 @@ pred = "data/pred_shapefile"
 output_dir = "data/MulticlassUnet_box_output"
 score_dir = "data/MulticlassUnet_box_scores"
 ```
-The second step is calculating scores of the predicted results from the CNN model using our matching algorithim in the [evaluate](evaluate.py) file 
+The second step is calculating scores of the predicted results from the CNN model using our matching algorithim in the [evaluate](evaluate.py) file in order to compare them with our model's prediction scores.
+We used [vit_h](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth) SAM model checkpoint in this approach, you can change it to another models in the [pred_SAM](pred_SAM.py) file.
+
+To run our approach prediction you need to run main function and you can change arguments in order to select specific CNN model and select specific prompt type:
+For the CNN model choose either *multiclassUnet* (Multiclass Unet CNN model) or *DCNN* (Dlink-Net CNN model).
+For prompt type you can choose one of these prompts [single point,single + negative,skeleton,multiple points,multiple points + single point,multiple points + negative points,box,box + single point,box + multiple points]
+Example:
+```
+main(CNN="multiclassUnet",prompt_type="single point",sam=sam)
+
+```
 ## Key Features
 
 - AI models Implementation for building segmentation in remote sensing.
