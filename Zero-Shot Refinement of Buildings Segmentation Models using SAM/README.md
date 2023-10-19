@@ -23,7 +23,7 @@ Single Point          |          Skeleton Points          |          Bounding Bo
 ![2_550](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/06fd6fcf-c757-4fd6-aabc-7f7ddd28e97d) | ![2_54](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/51021610-b256-46e8-8083-4c1ab351a835) | ![2_52](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/3427e084-0668-4641-bfb5-eb0fccb47529)   
 
 ## Installation 
-Same packages and libraries as Segment anything model [SAM](https://github.com/facebookresearch/segment-anything) 
+This project requires python>=3.10 and same packages and libraries relevant to this python version as Segment anything model[SAM](https://github.com/facebookresearch/segment-anything) 
 
 ## Getting Started
 
