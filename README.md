@@ -2,7 +2,7 @@
 
 [![Conference](https://img.shields.io/badge/ECRS-Conference-brightgreen)](https://ecrs2023.sciforum.net/)
 
-Welcome to the official repository of GEOAI papers published in the 5th International Electronic Conference on Remote Sensing (ECRS 2023).  
+Welcome to the official repository of GEOAI papers published in the 5th International Electronic Conference on Remote Sensing (ECRS 2023). Here you can explore a comprehensive collection of insightful research papers covering various topics in the field of remote sensing. We invite you to delve into the latest advancements and discoveries presented by our esteemed researchers and authors.
 
 ## [Empirical Study of PEFT techniques for Winter Wheat Segmentation](https://geogroup.ai/publication/2023ecrs_peftwheat/2023ECRS_PEFTWheat.pdf)
 
