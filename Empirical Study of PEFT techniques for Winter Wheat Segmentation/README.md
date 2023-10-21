@@ -1,4 +1,4 @@
-# Aerial SAM  
+# PEFTing TSViT 
 
 [![Conference](https://img.shields.io/badge/ECRS-Conference-brightgreen)](https://ecrs2023.sciforum.net/)
 
