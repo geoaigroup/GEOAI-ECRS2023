@@ -149,7 +149,7 @@ def load_model(configuration):
 
         elif model_number==model_type.TOKEN_EXTEND_FTTSVIT:
             net1=Token_TSViT(configuration["model_config"])
-            print(net1.load_state_dict(net.state_dict(),strict=False))
+            net1.load_state_dict(net.state_dict(),strict=False)
             net=net1
             net.requires_grad_(False)
             net.temporal_token.requires_grad_(configuration["all_tokens"])
@@ -363,32 +363,21 @@ if __name__=="__main__":
         'ignore_background': False
         }
     from munich_dataset import munich_dataset
-    base_path="D:\\GEOAI\\datasets\\munich_24"
-    
+    from config import NEPTUNE_API_TOKEN,PROJECT_NAME,PROCCESSED_DATA_PATH
 
-    # import random 
+    base_path=PROCCESSED_DATA_PATH
     def get_tile(name):
         return name.split("_")[1]
-    
-    # train_datalist=[a for a in  os.listdir(base_path) if a.startswith("16_")]
-
-    # test_datalist=[a for a in  os.listdir(base_path) if a.startswith("17_")]
-
-    # train_dataset=munich_dataset(base_path,train_datalist)
-    # eval_dataset=munich_dataset(base_path,test_datalist[:3200])
-    # test_dataset=munich_dataset(base_path,test_datalist[3200:])
-
-
     datalist=[a for a in  os.listdir(base_path)]
-    train_path="D:\\GEOAI\\datasets\\train_muinich\\original_dist\\train_fold0.tileids"
+    train_path="original_dist/train_fold0.tileids"
     with open(train_path,"r") as f:
         train_id=f.read().split("\n")
     train_datalist=[a for a in datalist if get_tile(a) in train_id]
-    test_path="D:\\GEOAI\\datasets\\train_muinich\\original_dist\\test_fold0.tileids"
+    test_path="original_dist/test_fold0.tileids"
     with open(test_path,"r") as f:
         test_id=f.read().split("\n")
     test_datalist=[a for a in datalist if get_tile(a) in test_id]
-    eval_path="D:\\GEOAI\\datasets\\train_muinich\\original_dist\\eval.tileids"
+    eval_path="original_dist/eval.tileids"
     with open(eval_path,"r") as f:
         eval_id=f.read().split("\n")
     eval_datalist=[a for a in datalist if get_tile(a) in eval_id]
@@ -397,53 +386,57 @@ if __name__=="__main__":
     eval_dataset=munich_dataset(base_path,eval_datalist)
     test_dataset=munich_dataset(base_path,test_datalist)
 
-    from config import NEPTUNE_API_TOKEN,PROJECT_NAME
+    
     run_config={
+        #providing the dataset
         "train_dataset":train_dataset,
         "test_dataset":test_dataset,
         "eval_dataset":eval_dataset,
-         
+        
+        #possible pefting techniques
         "model_number":model_type.LORA,
 
-
+        #in adapter, lora, and promt, if true, change token, else, add head layer
         "change_to_token":True,
 
-
+        #must be unique, serves as the neptune custom run id 
         "model_name":"tesyibgss3dds3",
+
+        #initial TSViT model as provided by the model
         "initial_wait_file":"Initial_TSViT_model.pt",
 
-
+        #general hyperparameters
         "lr":1e-3,
         "number_of_epochs":40,
+        "add_scheduler":False,
+        "vertical_flip":False,
+        "horizontal_flip":False,
+        "seed":313,
 
-        # "full":True,
-
+        #LORA hyperparamters
         "r":1,
         "rs":1,
         "rt":2,
         
+        #Prompt Tuning hyperparameters
         "external":True,
         "temporal_prompt_dim":2,
         "spatial_prompt_dim":2,
-        # "temporal_adapter_dim":8,
-        # "spatial_adapter_dim":8,
 
-        "all_tokens":True,
+        #Adapter Paramters
+        "temporal_adapter_dim":8,
+        "spatial_adapter_dim":8,
+
+        #Token Tune Parameters
+        "all_tokens":True, #in token extended, if true train all tokens, else, train 8 tokens (27 from munich -  19 from PASTIS)
         "model_config":my_config,
-
-        "test_and_eval_split":True,
-        "no_eval":False,
+        "full":True,#if full = true, train all paramters else, train token only
         
-        "add_scheduler":False,
-        "vertical_flip":False,
-        "horizontal_flip":False,
-        "semisupervised":False,
-        "seed":313,
-
+        
+        #Neptune settings
         "do_neptune":True,
-
-        "project_name":PROJECT_NAME,
-        "api_token":NEPTUNE_API_TOKEN ,
+        "project_name":PROJECT_NAME, #fix in config
+        "api_token":NEPTUNE_API_TOKEN , #fix in config
     }
     PEFTTrain(run_config)
 

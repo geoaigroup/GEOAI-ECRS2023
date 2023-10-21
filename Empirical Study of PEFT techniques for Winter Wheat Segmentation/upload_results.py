@@ -77,7 +77,7 @@ if __name__=="__main__":
     net.cuda()
     test_dataset=TSViT_leb_dataset("../data/cropped_tiffs_24",[2020],aois=[0,1,2,3,4])
     
-    from neptune_config import NEPTUNE_API_TOKEN,PROJECT_NAME
+    from config import NEPTUNE_API_TOKEN,PROJECT_NAME
 
     run=neptune.init_run(project=PROJECT_NAME,
     api_token=NEPTUNE_API_TOKEN,

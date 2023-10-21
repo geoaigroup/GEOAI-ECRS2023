@@ -58,8 +58,10 @@ class munich_dataset(Dataset):
 
         X=tile["inputs"]
         return X,y.astype(np.float64).reshape((24,24))
-        
-
+    
+    def __str__(self):
+        return self.datalist
+    
 if __name__=="__main__":
     from tqdm import tqdm
     from torch.utils.data.dataloader import DataLoader
@@ -76,3 +78,5 @@ if __name__=="__main__":
         if cnt==100:
             break
 
+
+        

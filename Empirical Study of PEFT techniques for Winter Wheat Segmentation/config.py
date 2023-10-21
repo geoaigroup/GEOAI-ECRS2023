@@ -17,3 +17,7 @@ TSVIT_config={
         'scale_dim':4,
         'ignore_background': False
 }
+
+MUNICH_DATA_PATH="archive/munich480"
+PROCCESSED_DATA_PATH="munich_24"
+
