@@ -397,7 +397,7 @@ if __name__=="__main__":
     eval_dataset=munich_dataset(base_path,eval_datalist)
     test_dataset=munich_dataset(base_path,test_datalist)
 
-    from neptune_config import NEPTUNE_API_TOKEN,PROJECT_NAME
+    from config import NEPTUNE_API_TOKEN,PROJECT_NAME
     run_config={
         "train_dataset":train_dataset,
         "test_dataset":test_dataset,
@@ -409,8 +409,9 @@ if __name__=="__main__":
         "change_to_token":True,
 
 
-        "model_name":"tesyibgss33",
-        "initial_wait_file":"D:\\GEOAI\\datasets\\train_muinich\\model.pt",
+        "model_name":"tesyibgss3dds3",
+        "initial_wait_file":"Initial_TSViT_model.pt",
+
 
         "lr":1e-3,
         "number_of_epochs":40,
@@ -432,12 +433,15 @@ if __name__=="__main__":
 
         "test_and_eval_split":True,
         "no_eval":False,
-        "do_neptune":True,#False,
+        
         "add_scheduler":False,
         "vertical_flip":False,
         "horizontal_flip":False,
         "semisupervised":False,
         "seed":313,
+
+        "do_neptune":True,
+
         "project_name":PROJECT_NAME,
         "api_token":NEPTUNE_API_TOKEN ,
     }

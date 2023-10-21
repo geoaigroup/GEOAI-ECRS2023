@@ -349,13 +349,13 @@ if __name__=="__main__":
         'ignore_background': False
     }
     
-    from neptune_config import NEPTUNE_API_TOKEN,PROJECT_NAME
+    from config import NEPTUNE_API_TOKEN,PROJECT_NAME
     run_config={
         "datalist_path":"D:\\GEOAI\\code\\crop-monitoring-TSViT\\peft\\data.pkl" ,
         "model_number":MODEL_TYPE.ADAPTER_TUNE,
         "data_path":"D:\\GEOAI\\code\\Requested_Tiffs_lcc\\cropped_tiffs_24",
         "model_name":"bla_bla_blas",
-        "initial_wait_file":"D:\\GEOAI\\code\\crop-monitoring-TSViT\\peft\\model.pt",
+        "initial_wait_file":"Initial_TSViT_model.pt",
         "add_dice_loss":False,
         "lr":1e-4,
         # "r":1,
