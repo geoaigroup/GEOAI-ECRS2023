@@ -349,6 +349,7 @@ if __name__=="__main__":
         'ignore_background': False
     }
     
+    from neptune_config import NEPTUNE_API_TOKEN,PROJECT_NAME
     run_config={
         "datalist_path":"D:\\GEOAI\\code\\crop-monitoring-TSViT\\peft\\data.pkl" ,
         "model_number":MODEL_TYPE.ADAPTER_TUNE,
@@ -375,8 +376,9 @@ if __name__=="__main__":
         "horizontal_flip":True,
         "semisupervised":False,
         "my_TSViT_config":my_TSVIT_config,
-        "neptune_project_name":"GEOgroup/crop-monitoring",
-        "neptune_token":"eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiJmZGU2MDg4MC0yOTE5LTRjMmItYjZmMi1jNDJjMGRhYjcyZWQifQ=="
+
+        "neptune_project_name":PROJECT_NAME,
+        "neptune_token":NEPTUNE_API_TOKEN,
     }
     PEFTTrain(run_config)
 

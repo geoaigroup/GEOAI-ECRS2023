@@ -77,8 +77,10 @@ if __name__=="__main__":
     net.cuda()
     test_dataset=TSViT_leb_dataset("../data/cropped_tiffs_24",[2020],aois=[0,1,2,3,4])
     
-    run=neptune.init_run(project="GEOgroup/crop-monitoring",
-    api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiJmZGU2MDg4MC0yOTE5LTRjMmItYjZmMi1jNDJjMGRhYjcyZWQifQ==",
+    from neptune_config import NEPTUNE_API_TOKEN,PROJECT_NAME
+
+    run=neptune.init_run(project=PROJECT_NAME,
+    api_token=NEPTUNE_API_TOKEN,
     name="test images 1223121321321321",
     custom_run_id="test images 7")
     upload(test_dataset,run,net,10)

@@ -220,8 +220,8 @@ def PEFTTrain ( peft_config):
     os.makedirs(f"save_models/{model_name}")#,exist_ok=True
     pickle.dump(peft_config,open(f"save_models/{model_name}/config.pkl","wb"))
     if run_config["do_neptune"]:
-        run=neptune.init_run(project="GEOgroup/crop-monitoring",
-        api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiJmZGU2MDg4MC0yOTE5LTRjMmItYjZmMi1jNDJjMGRhYjcyZWQifQ==",
+        run=neptune.init_run(project=run_config["project_name"],
+        api_token=run_config["api_token"],
         name=model_name,
         custom_run_id=model_name)
         hyperparams={
@@ -397,6 +397,7 @@ if __name__=="__main__":
     eval_dataset=munich_dataset(base_path,eval_datalist)
     test_dataset=munich_dataset(base_path,test_datalist)
 
+    from neptune_config import NEPTUNE_API_TOKEN,PROJECT_NAME
     run_config={
         "train_dataset":train_dataset,
         "test_dataset":test_dataset,
@@ -437,6 +438,8 @@ if __name__=="__main__":
         "horizontal_flip":False,
         "semisupervised":False,
         "seed":313,
+        "project_name":PROJECT_NAME,
+        "api_token":NEPTUNE_API_TOKEN ,
     }
     PEFTTrain(run_config)
 
