@@ -4,6 +4,14 @@
 
 Welcome to the official repository of GEOAI papers published in the 5th International Electronic Conference on Remote Sensing (ECRS 2023). Here you can explore a comprehensive collection of insightful research papers covering various topics in the field of remote sensing. We invite you to delve into the latest advancements and discoveries presented by our esteemed researchers and authors.
 
+**Table Of Contents**
+* [Empirical Study of PEFT techniques for Winter Wheat Segmentation](#empirical-study-of-peft-techniques-for-winter-wheat-segmentation)
+* [Zero-Shot Refinement of Buildings’ Segmentation Models using SAM](#zero-shot-refinement-of-buildings-segmentation-models-using-sam)
+* [Extending GradCam-based XAI methods for Remote Sensing Imagery Segmentation](#extending-gradcam-based-xai-methods-for-remote-sensing-imagery-segmentation)
+* [Trainable Noise Model as an XAI evaluation method: application on Sobol for remote sensing image segmentation](#trainable-noise-model-as-an-xai-evaluation-method-application-on-sobol-for-remote-sensing-image-segmentation)
+* [Buildings Classification using Very High Resolution Satellite Imagery](https://geogroup.ai/publication/2023ecrs_bdabtc/2023ECRS_BDABTC.pdf)
+
+
 ## [Empirical Study of PEFT techniques for Winter Wheat Segmentation](https://geogroup.ai/publication/2023ecrs_peftwheat/2023ECRS_PEFTWheat.pdf)
 
 ![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
