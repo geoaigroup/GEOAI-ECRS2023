@@ -11,7 +11,7 @@ Welcome to the official repository of GEOAI papers published in the 5th Internat
 * [Trainable Noise Model as an XAI evaluation method: application on Sobol for remote sensing image segmentation](#trainable-noise-model-as-an-XAI-evaluation-method-application-on-Sobol-for-remote-sensing-image-segmentation)
 
 
-## [Empirical Study of PEFT techniques for Winter Wheat Segmentation]
+## [Empirical Study of PEFT techniques for Winter Wheat Segmentation](https://geogroup.ai/publication/2023ecrs_peftwheat/2023ECRS_PEFTWheat.pdf)
 
 ![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
 
