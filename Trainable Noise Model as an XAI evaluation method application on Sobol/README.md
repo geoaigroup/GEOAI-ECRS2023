@@ -31,7 +31,7 @@ Adapted Sobol         |          Unoise model
 
 Inside the Folder Sobol_WHU:
 
-- pytorch_example-WHU.ipynb is used to apply SOBOL as XAI method on the WHU building segmentation model. (sobol_attribution_method/torch_explainer.py could be editted to show intermediate results)
+- pytorch_example-WHU.ipynb is used to apply SOBOL as XAI method on the WHU building segmentation model | (sobol_attribution_method/torch_explainer.py could be editted to show intermediate results)
 
 
 Inside the folder NoiseTraining-WHU:
