@@ -21,7 +21,7 @@ Our research focuses on XAI methods for segmentation models and the evaluation t
 
 Adapted Sobol         |          Unoise model              
 :-------------------------:|:-------------------------:
-![sobol](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/65351288/9ed9d0b1-6e9c-449c-8f8c-20a9de6c03c0) ![unoise](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/65351288/a4f7153f-ba0d-49fd-8c22-004b6dc7dad2)
+![sobol](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/65351288/9ed9d0b1-6e9c-449c-8f8c-20a9de6c03c0) | ![unoise](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/65351288/a4f7153f-ba0d-49fd-8c22-004b6dc7dad2)
 
 
 
