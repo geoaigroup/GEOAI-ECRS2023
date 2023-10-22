@@ -1,4 +1,5 @@
-# Aerial SAM  
+# Extending CAM-based XAI methods for Remote Sensing Imagery Segmentation
+
 
 [![Conference](https://img.shields.io/badge/ECRS-Conference-brightgreen)](https://ecrs2023.sciforum.net/)
 
@@ -6,4 +7,4 @@ Welcome to the official repository for our paper titled "Extending GradCam-based
 
 ## Overview
 
-
+Artificial intelligence (AI) has recently covered many earth observation applications. AI-based data-driven methods perform outstandingly in several remote sensing image processing tasks, such as object detection, classification, and segmentation. However, current AI-based methods do not provide comprehensible physical interpretations of the utilized data, extracted features, and predictions/inference operations. As a result, deep learning models trained using high-resolution satellite imagery lack transparency and explainability and can be merely seen as a black box, which limits their wide-level adoption. Experts need help understanding the complex behavior of AI models and the underlying decision-making process. The explainable artificial intelligence (XAI) field is an emerging field providing means for robust, practical, and trustworthy deployment of AI models. Several XAI techniques have been proposed for image classification tasks, whereas the interpretation of image segmentation remains largely unexplored. This paper offers to bridge this gap by adapting the recent XAI classification algorithms and making them usable for muti-class image segmentation, where we mainly focus on buildings’ segmentation from high-resolution satellite images. To benchmark and compare the performance of the proposed approaches, we introduce a new XAI evaluation methodology and metric based on "Entropy" to measure the model uncertainty. Conventional XAI evaluation methods rely mainly on feeding area-of-interest regions from the image back to the pre-trained (utility) model and then calculating the average change in the probability of the target class. Those evaluation metrics lack the needed robustness, and we show that using Entropy to monitor the model uncertainty in segmenting the pixels within the target class is more suitable. We hope this work will pave the way for additional XAI research for image segmentation and applications in the remote sensing discipline

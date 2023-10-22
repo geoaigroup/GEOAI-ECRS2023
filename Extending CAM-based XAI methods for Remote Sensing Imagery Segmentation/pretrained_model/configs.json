@@ -1,0 +1,77 @@
+{
+   "channel_names": [
+      "buildings",
+      "borders",
+      "spacing"
+   ],
+   "num_classes": 3,
+   "model": {
+      "arch": "Unet",
+      "encoder_name": "tu-tf_efficientnet_b0",
+      "encoder_weights": true,
+      "in_channels": 3,
+      "classes": 3
+   },
+   "optimizer": {
+      "name": "Adam",
+      "kwargs": {
+         "lr": 0.0001,
+         "betas": [
+            0.9,
+            0.99
+         ],
+         "eps": 1e-08,
+         "weight_decay": 0.0001,
+         "amsgrad": false
+      }
+   },
+   "scheduler": {
+      "name": "PolyLR",
+      "kwargs": {
+         "epochs": 40,
+         "ratio": 0.9
+      }
+   },
+   "loss": {
+      "name": "custom",
+      "kwargs": {
+         "loss_names": [
+            "dice",
+            "bce"
+         ],
+         "inter_weights": [
+            1.0,
+            0.2,
+            0.2
+         ],
+         "intra_weights": [
+            1.0,
+            1.0
+         ],
+         "channel_names": [
+            "buildings",
+            "borders",
+            "spacing"
+         ]
+      }
+   },
+   "dataset": {
+      "path": "/home/hasan/Desktop/GeoGroupAI/Datasets/WHU/data",
+      "totensor": true,
+      "resize": 448,
+      "num_classes": 3,
+      "forviz": false
+   },
+   "training": {
+      "activation": "sigmoid",
+      "epochs": 40,
+      "lr": 0.0001,
+      "batch_size": 16,
+      "val_batch_size": 1,
+      "val_freq": 1,
+      "device": "cuda",
+      "amp": true
+   },
+   "save_dir": "./results/tu-tf_efficientnet_b0_Unet_whu_3-classes_40-epochs_TRY001",
+   "neptune_run_name": "tu-tf_efficientnet_b0_Unet_whu_3-classes_40-epochs_TRY001"
+}
