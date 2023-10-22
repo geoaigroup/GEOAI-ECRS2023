@@ -8,7 +8,7 @@ Welcome to the official repository of GEOAI papers published in the 5th Internat
 * [Empirical Study of PEFT techniques for Winter Wheat Segmentation](#empirical-study-of-peft-techniques-for-winter-wheat-segmentation)
 * [Zero-Shot Refinement of Buildings’ Segmentation Models using SAM](#zero-shot-refinement-ofbuildings’-segmentation-models-using-SAM)
 * [Extending GradCam-based XAI methods for Remote Sensing Imagery Segmentation](#extending-GradCam-based-XAI-methods-for-remote-sensing-imagery-segmentation)
-* [Trainable Noise Model as an XAI evaluation method: application on Sobol for remote sensing image segmentation](#trainable-noise-model-as-an-XAI-evaluation-method:-application-on-Sobol-for-remote-sensing-image-segmentation)
+* [Trainable Noise Model as an XAI evaluation method: application on Sobol for remote sensing image segmentation](#trainable-noise-model-as-an-XAI-evaluation-method-application-on-Sobol-for-remote-sensing-image-segmentation)
 
 
 ## [Empirical Study of PEFT techniques for Winter Wheat Segmentation]
