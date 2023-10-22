@@ -14,6 +14,7 @@ import os
 import neptune
 from adaptformer import AdaptTSViT
 from loraTSViT import LoraTSViT
+from BiTTSViT import FBFTSViT,PBFTSViT
 import loralib as lora
 import random
 
@@ -52,6 +53,9 @@ class model_type:
     LORA=7
     TOKEN_FTTSVIT=8
     TOKEN_EXTEND_FTTSVIT=9
+    FULL_BIT_TUNE=10
+    PARTIAL_BIT_TUNE=11
+
 
     def to_string(self,model):
         names={
@@ -64,7 +68,9 @@ class model_type:
             self.ADAPTSViT:"ADAPTSViT",
             self.LORA:"LORA",
             self.TOKEN_FTTSVIT:"TOKEN_FTTSVIT",
-            self.TOKEN_EXTEND_FTTSVIT:"TOKEN_EXTEND_FTTSVIT",   
+            self.TOKEN_EXTEND_FTTSVIT:"TOKEN_EXTEND_FTTSVIT",
+            self.FULL_BIT_TUNE:"FULL_BIT_TUNE", 
+            self.PARTIAL_BIT_TUNE:"PARTIAL_BIT_TUNE",  
         }
         return names[model]
 
@@ -140,7 +146,7 @@ def load_model(configuration):
         elif model_number==model_type.TOKEN_FTTSVIT:
             net1=TSViT(configuration["model_config"])
             net.temporal_token=None
-            print(net1.load_state_dict(net.state_dict(),strict=False))
+            # print(net1.load_state_dict(net.state_dict(),strict=False))
             net=net1
             if "full" not in configuration.keys():
                 configuration["full"]=False
@@ -155,6 +161,24 @@ def load_model(configuration):
             net.temporal_token.requires_grad_(configuration["all_tokens"])
             net.temporal_token1.requires_grad_(True)
 
+        elif model_number==model_type.FULL_BIT_TUNE:
+            net1=FBFTSViT(model_config=TSVIT_config)
+            for param in net1.parameters():
+                if(param.requires_grad==False):
+                       param.requires_grad=True
+                else:
+                       param.requires_grad=False
+            print(net1.load_state_dict(net.state_dict(),strict=False))
+            net=net1
+        elif model_number==model_type.PARTIAL_BIT_TUNE:
+            net1=PBFTSViT(model_config=TSVIT_config)
+            for param in net1.parameters():
+                if(param.requires_grad==False):
+                       param.requires_grad=True
+                else:
+                       param.requires_grad=False
+            net1.load_state_dict(net.state_dict(),strict=False)            
+            net=net1
              
         
         return net
@@ -394,7 +418,7 @@ if __name__=="__main__":
         "eval_dataset":eval_dataset,
         
         #possible pefting techniques
-        "model_number":model_type.LORA,
+        "model_number":model_type.FULL_BIT_TUNE,
 
         #in adapter, lora, and promt, if true, change token, else, add head layer
         "change_to_token":True,
