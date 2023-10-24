@@ -1,7 +1,6 @@
 # Zero-Shot Refinement of Buildings Segmentation Models using SAM  
 
 [![Conference](https://img.shields.io/badge/ECRS-Conference-brightgreen)](https://ecrs2023.sciforum.net/)
-[![Workshop](https://img.shields.io/badge/NOAA%20Workshop-5th%20AI%20Demo-blue)](https://noaaai2023.sched.com/)
 
 Welcome to the official repository for our paper titled "Zero-Shot Refinement of Buildings’ Segmentation Models using SAM" to appear at the 5th International Electronic Conference on Remote Sensing (ECRS 2023).
 Paper: [arXiv](https://arxiv.org/abs/2310.01845)
