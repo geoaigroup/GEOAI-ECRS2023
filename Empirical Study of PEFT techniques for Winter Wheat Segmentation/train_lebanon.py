@@ -16,6 +16,7 @@ from adaptformer import AdaptTSViT
 from loraTSViT import LoraTSViT
 import loralib as lora
 from BiTTSViT import FBFTSViT,PBFTSViT
+from Adamix import AdamixTSViT
 from loss import DiceBCELoss,semiSupervisedBCELoss
 
 TSVIT_config={
@@ -50,7 +51,8 @@ class MODEL_TYPE:
      TOKEN_TUNE=7
      FULL_BIT_TUNE=8
      PARTIAL_BIT_TUNE=9
-     model_type=["from scratch","fine tune full","head fine tune","shallow prompt tune","deep prompt tune","adapter tune","lora tune","token tune","full bit tune", "partial bit tune"]
+     ADAMIXTSVIT=10
+     model_type=["from scratch","fine tune full","head fine tune","shallow prompt tune","deep prompt tune","adapter tune","lora tune","token tune","full bit tune", "partial bit tune","Adamix TSViT"]
 
 
 def load_model(configuration):
@@ -117,6 +119,12 @@ def load_model(configuration):
                        param.requires_grad=False
             net1.load_state_dict(net.state_dict(),strict=False)            
             net=net1
+        elif model_number==MODEL_TYPE.ADAMIXTSVIT:
+            net1=AdamixTSViT(TSVIT_config,model_number==4,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"])
+            net1.load_state_dict(net.state_dict(),strict=False)
+            net=net1
+            net.requires_grad_(False)
+            net.set_pt_paramters()
         return net
 
 def load_dataset(config):
@@ -374,20 +382,20 @@ if __name__=="__main__":
     from config import NEPTUNE_API_TOKEN,PROJECT_NAME
     run_config={
         "datalist_path":"D:\\GEOAI\\code\\crop-monitoring-TSViT\\peft\\data.pkl" ,
-        "model_number":MODEL_TYPE.PARTIAL_BIT_TUNE,
+        "model_number":MODEL_TYPE.ADAMIXTSVIT,
         "data_path":"D:\\GEOAI\\code\\Requested_Tiffs_lcc\\cropped_tiffs_24",
         "model_name":"bla_bla_blasasdasSSS",
         "initial_wait_file":"Initial_TSViT_model.pt",
         "add_dice_loss":False,
         "lr":1e-4,
-        # "r":1,
-        # "rs":1,
-        # "rt":2,
+        "r":1,
+        "rs":1,
+        "rt":2,
         "number_of_epochs":20,
-        # "external":True,
+        "external":True,
         "seed":22,  
-        # "temporal_prompt_dim":0,
-        # "spatial_prompt_dim":8,
+        "temporal_prompt_dim":0,
+        "spatial_prompt_dim":8,
         "temporal_adapter_dim":8,
         "spatial_adapter_dim":8,
         "test_and_eval_split":True,

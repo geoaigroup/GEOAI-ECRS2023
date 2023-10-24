@@ -15,6 +15,7 @@ import neptune
 from adaptformer import AdaptTSViT
 from loraTSViT import LoraTSViT
 from BiTTSViT import FBFTSViT,PBFTSViT
+from Adamix import AdamixTSViT
 import loralib as lora
 import random
 
@@ -55,6 +56,7 @@ class model_type:
     TOKEN_EXTEND_FTTSVIT=9
     FULL_BIT_TUNE=10
     PARTIAL_BIT_TUNE=11
+    ADAMIXTSVIT=12
 
 
     def to_string(self,model):
@@ -70,7 +72,9 @@ class model_type:
             self.TOKEN_FTTSVIT:"TOKEN_FTTSVIT",
             self.TOKEN_EXTEND_FTTSVIT:"TOKEN_EXTEND_FTTSVIT",
             self.FULL_BIT_TUNE:"FULL_BIT_TUNE", 
-            self.PARTIAL_BIT_TUNE:"PARTIAL_BIT_TUNE",  
+            self.PARTIAL_BIT_TUNE:"PARTIAL_BIT_TUNE", 
+            self.ADAMIXTSVIT:"ADAMIXTSVIT", 
+
         }
         return names[model]
 
@@ -179,7 +183,12 @@ def load_model(configuration):
                        param.requires_grad=False
             net1.load_state_dict(net.state_dict(),strict=False)            
             net=net1
-             
+        elif model_number==model_type.ADAMIXTSVIT:
+            net1=AdamixTSViT(TSVIT_config,model_number==4,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"])
+            net1.load_state_dict(net.state_dict(),strict=False)
+            net=net1
+            net.requires_grad_(False)
+            net.set_pt_paramters()     
         
         return net
 
@@ -418,7 +427,7 @@ if __name__=="__main__":
         "eval_dataset":eval_dataset,
         
         #possible pefting techniques
-        "model_number":model_type.FULL_BIT_TUNE,
+        "model_number":model_type.ADAMIXTSVIT,
 
         #in adapter, lora, and promt, if true, change token, else, add head layer
         "change_to_token":True,
@@ -458,7 +467,7 @@ if __name__=="__main__":
         
         
         #Neptune settings
-        "do_neptune":True,
+        "do_neptune":False,
         "project_name":PROJECT_NAME, #fix in config
         "api_token":NEPTUNE_API_TOKEN , #fix in config
     }
