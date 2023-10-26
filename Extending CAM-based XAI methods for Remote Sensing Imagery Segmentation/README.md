@@ -15,22 +15,37 @@ This paper offers to bridge this gap by adapting the recent XAI classification a
 ![276731622-3e224412-9ac5-47f9-8917-95fc74ac5ab6](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/78584545/d87c1af5-c7fc-4fc9-8d5b-4d97dbe9756e)
 
 
+
+
 ## Installation 
 
+In order to properly run the paper's code, the following packages should be installed:
+1. grad-cam
+2. segmentation_models_pytorch 
+3. numpy
+4. opencv-python
+5. torch
+6. skimage.io
+7. rasterio
+8. imageio
+9. matplotlib
+10. ttach 
+11. tqdm
 
 ## Implementation
-To run our approach prediction you need to run main function and you can change arguments in order to select specific CNN model and select specific prompt type:
+In order to reproduce the reported results, you need simply to go through the grad_cam_extensions.ipynb notebook that executes the following steps in order:
 
-For the CNN model choose either *multiclassUnet* (Multiclass Unet CNN model) or *DCNN* (Dlink-Net CNN model).
-
-For prompt type you can choose one of these prompts 
-
+1. Cell 1: Import the required packages
+2. Cell 2: Load the pre-trained model weights
+3. Cell 3: Define the CAM-based Extensions
+4. Cell 4: Apply the adapted CAM-based Extensions to the considered dataset. Here you should define the following parameters:
+   - XAI_method: define the studied cam-based methods. Full list = ["grad_cam", "hires_cam", "ew_cam", "grad_cam_pp", "x_grad_cam","score_cam", "layer_cam", "eigen_cam", "eigen_grad_cam"]
+   - target_layers: define the considered target layer. In the code, we considered the first decoder block, where target_layers =  [model.decoder.blocks[decoder_idx - 1]]
+   - target_category: define the target class to be interpreted. In the code, we consider target_category = 0 which corresponds to the building class.
 
 ## Datasets
 
 -[WHU Buildings dataset](http://gpcv.whu.edu.cn/data/building_dataset.html) 
-
-
 
 ## Citation:
 
