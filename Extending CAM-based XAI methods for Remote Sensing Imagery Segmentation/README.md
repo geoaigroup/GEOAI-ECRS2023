@@ -8,8 +8,11 @@ Paper: [arXiv](https://arxiv.org/pdf/2310.01837.pdf)
 
 ## Overview
 
+This paper offers to bridge this gap by adapting the recent XAI classification algorithms and making them usable for muti-class image segmentation, where we mainly focus on buildings’ segmentation from high-resolution satellite images. To benchmark and compare the performance of the proposed approaches, we introduce a new XAI evaluation methodology and metric based on "Entropy" to measure the model uncertainty.
 
 ## Some visual results
+
+![276731622-3e224412-9ac5-47f9-8917-95fc74ac5ab6](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/78584545/d87c1af5-c7fc-4fc9-8d5b-4d97dbe9756e)
 
 
 ## Installation 
