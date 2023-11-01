@@ -26,12 +26,12 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 
 Munich 480 dataset:
 1. download the Munich dataset 
-2. unzip and store data in the archive directory
+2. unzip the file in "Munich480" directory
 3. run preporcess_munich.py
-4. change the "run_config" from train_munich.py and run the file
+4. change the "run_config" from train_munich.py or run.py and run the file
 
 
 
 ## Datasets
-Lebanese Dataset (Will be available later on)
-Munich Dataset :https://www.kaggle.com/datasets/artelabsuper/sentinel2-munich480
+1. Lebanese Dataset (Will be available later on)
+2. Munich Dataset : https://www.kaggle.com/datasets/artelabsuper/sentinel2-munich480
