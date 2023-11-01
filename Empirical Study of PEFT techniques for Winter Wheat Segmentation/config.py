@@ -21,3 +21,5 @@ TSVIT_config={
 MUNICH_DATA_PATH="Munich480"
 PROCCESSED_DATA_PATH="munich_24"
 
+NEPTUNE_API_TOKEN="Enter your API token here"
+PROJECT_NAME="add project name here"
