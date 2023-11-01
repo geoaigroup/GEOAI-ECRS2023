@@ -10,8 +10,10 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 
 ## Key Features
 
-
-
+- This repository contains all the necessary python files and notebooks to reproduce the results of the paper on the Munich dataset (The Lebanese Dataset will be added on a later date, but all code required to run the experiments is available right now), specifically:
+  - preprocessing done on the both the Lebanese and the Munich 480 dataset.
+  - The PEFT techniques applied on TSViT model.
+  - The training code for both Lebanon and Munich dataset.
 
 
 ## Some visual results
