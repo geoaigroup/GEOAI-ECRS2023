@@ -18,6 +18,6 @@ TSVIT_config={
         'ignore_background': False
 }
 
-MUNICH_DATA_PATH="archive/munich480"
+MUNICH_DATA_PATH="Munich480"
 PROCCESSED_DATA_PATH="munich_24"
 
