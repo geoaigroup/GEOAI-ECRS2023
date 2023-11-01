@@ -6,202 +6,11 @@ import numpy as np
 import os
 import neptune
 import pickle
-import random
 from tqdm import tqdm
 
-from TSViT import TSViT,Transformer,PreNorm,Attention,FeedForward
-from FTSViT import FTTSViT
-from Token_TSViT import Token_TSViT
-from PromptTuning import PTTSViT
-from adaptformer import AdaptTSViT
-
-from BiTTSViT import FBFTSViT,PBFTSViT
-from Adamix import AdamixTSViT
-from loraTSViT import LoraTSViT
-
-import loralib as lora
-
+from models.model_loader import create_model
 from util import print_trainable_parameters,get_trainable_parameters,loss_and_metrics_multi_class,set_seed
-
 from loss import DiceBCELoss
-
-
-TSVIT_config={
-        'img_res':24,
-        'patch_size':2,
-        'num_classes':27,#19,
-        "max_seq_len":60,
-        'dim':128,
-        'temporal_depth':4,
-        'spatial_depth': 4,
-        'heads': 4,
-        'pool': 'cls',
-        'dim_head': 32,
-        'emb_dropout': 0.,
-        'scale_dim': 4,
-        'dropout':0,
-        'num_channels': 11,
-        'num_feature':16,
-        'scale_dim':4,
-        'ignore_background': False
-}
-
-
-class model_type:
-    """
-    This class holds all model types as well as their string format
-    It is like a enum in other languages
-    """
-    INITIAL_TSVIT=0
-    RANDOM_FTSVIT=1
-    HEAD_FTSVIT=2
-    FULL_FTSVIT=3
-    DEEP_PTTSViT=4
-    SHALLOW_PTTSVIT=5
-    ADAPTSViT=6
-    LORA=7
-    TOKEN_FTTSVIT=8
-    TOKEN_EXTEND_FTTSVIT=9
-    FULL_BIT_TUNE=10
-    PARTIAL_BIT_TUNE=11
-    ADAMIXTSVIT=12
-
-
-    def to_string(self,model):
-        names={
-            self.INITIAL_TSVIT:"INITIAL_TSVIT",
-            self.RANDOM_FTSVIT:"RANDOM_FTSVIT",
-            self.HEAD_FTSVIT:"HEAD_FTSVIT",
-            self.FULL_FTSVIT:"FULL_FTSVIT",
-            self.DEEP_PTTSViT:"DEEP_PTTSViT",
-            self.SHALLOW_PTTSVIT:"SHALLOW_PTTSVIT",
-            self.ADAPTSViT:"ADAPTSViT",
-            self.LORA:"LORA",
-            self.TOKEN_FTTSVIT:"TOKEN_FTTSVIT",
-            self.TOKEN_EXTEND_FTTSVIT:"TOKEN_EXTEND_FTTSVIT",
-            self.FULL_BIT_TUNE:"FULL_BIT_TUNE", 
-            self.PARTIAL_BIT_TUNE:"PARTIAL_BIT_TUNE", 
-            self.ADAMIXTSVIT:"ADAMIXTSVIT", 
-
-        }
-        return names[model]
-
-
-def load_model(configuration):
-        """
-        This function loads the model by using the configurations given
-        the con
-        """
-        net=torch.load(configuration["initial_wait_file"])
-        model_number=configuration["model_number"]
-        if model_number==model_type.RANDOM_FTSVIT:
-            net=FTTSViT(TSViT(TSVIT_config),number_of_classes=27)
-            net.requires_grad_(True)
-
-        elif model_number==model_type.FULL_FTSVIT:
-            net=FTTSViT(net,number_of_classes=27)
-            net.requires_grad_(True)
-        
-        elif model_number==model_type.HEAD_FTSVIT:
-            net.requires_grad_(False)
-            net=FTTSViT(net,number_of_classes=27)
-        
-        elif model_number==model_type.SHALLOW_PTTSVIT or model_number==model_type.DEEP_PTTSViT:
-            if "external" not in configuration.keys():
-                configuration["external"]=True
-
-            if not configuration["change_to_token"]:
-                TSVIT_config["num_classes"]=19
-            
-            net1=PTTSViT(TSVIT_config,model_number==model_type.DEEP_PTTSViT,configuration["temporal_prompt_dim"],configuration["spatial_prompt_dim"],configuration["external"])
-            
-            if configuration["change_to_token"]:
-                net.temporal_token=None
-
-            net1.load_state_dict(net.state_dict(),strict=False)
-            net=net1
-            net.requires_grad_(False)
-            net.set_pt_paramters()
-            if configuration["change_to_token"]:
-                net.mlp_change=nn.Identity()
-
-        elif model_number==model_type.ADAPTSViT:
-            if not configuration["change_to_token"]:
-                 TSVIT_config["num_classes"]=19
-            net1=AdaptTSViT(TSVIT_config,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"],number_of_classes=27)
-            if configuration["change_to_token"]:
-                net.temporal_token=None
-            net1.load_state_dict(net.state_dict(),strict=False)
-            net=net1
-            net.requires_grad_(False)
-            net.set_pt_paramters()
-            net.temporal_token.requires_grad_(True)
-            if configuration["change_to_token"]:
-                net.mlp_change=nn.Identity()
-        
-        elif model_number==model_type.LORA:
-            if "rt" not in configuration.keys():
-                configuration["rt"]=None
-            if "rs" not in configuration.keys():
-                configuration["rs"]=None
-            if not configuration["change_to_token"]:
-                 TSVIT_config["num_classes"]=19
-            else:
-                 net.temporal_token=None
-            net1=LoraTSViT(TSVIT_config,r=configuration["r"],rt=configuration["rt"],rs=configuration["rs"],number_of_classes=27)
-            net1.load_state_dict(net.state_dict(),strict=False)
-            lora.mark_only_lora_as_trainable(net1)
-            net=net1
-            net.mlp_change.requires_grad_(True)
-            if configuration["change_to_token"]:
-                net.mlp_change=nn.Identity()
-                net.temporal_token=nn.Parameter(torch.randn(1, 27, 128))
-        elif model_number==model_type.INITIAL_TSVIT:
-             net=TSViT(configuration["model_config"])
-        
-        elif model_number==model_type.TOKEN_FTTSVIT:
-            net1=TSViT(configuration["model_config"])
-            net.temporal_token=None
-            net=net1
-            if "full" not in configuration.keys():
-                configuration["full"]=False
-            net.requires_grad_(configuration["full"])
-            net.temporal_token.requires_grad_(True)
-
-        elif model_number==model_type.TOKEN_EXTEND_FTTSVIT:
-            net1=Token_TSViT(configuration["model_config"])
-            net1.load_state_dict(net.state_dict(),strict=False)
-            net=net1
-            net.requires_grad_(False)
-            net.temporal_token.requires_grad_(configuration["all_tokens"])
-            net.temporal_token1.requires_grad_(True)
-
-        elif model_number==model_type.FULL_BIT_TUNE:
-            net1=FBFTSViT(model_config=TSVIT_config)
-            for param in net1.parameters():
-                if(param.requires_grad==False):
-                       param.requires_grad=True
-                else:
-                       param.requires_grad=False
-            print(net1.load_state_dict(net.state_dict(),strict=False))
-            net=net1
-        elif model_number==model_type.PARTIAL_BIT_TUNE:
-            net1=PBFTSViT(model_config=TSVIT_config)
-            for param in net1.parameters():
-                if(param.requires_grad==False):
-                       param.requires_grad=True
-                else:
-                       param.requires_grad=False
-            net1.load_state_dict(net.state_dict(),strict=False)            
-            net=net1
-        elif model_number==model_type.ADAMIXTSVIT:
-            net1=AdamixTSViT(TSVIT_config,model_number==4,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"])
-            net1.load_state_dict(net.state_dict(),strict=False)
-            net=net1
-            net.requires_grad_(False)
-            net.set_pt_paramters()     
-        return net
-
 
 def test(net,dataset):
         """
@@ -230,14 +39,17 @@ def PEFTTrain ( peft_config):
     train_loss=[]
     eval_loss=[]
 
-    #loading datasets
+    #loading datasets 
     train_dataset=peft_config["train_dataset"] 
     eval_dataset=peft_config["eval_dataset"] 
     test_dataset=peft_config["test_dataset"] 
+    peft_config["train_dataset"]=str(peft_config["train_dataset"])
+    peft_config["eval_dataset"]=str(peft_config["eval_dataset"])
+    peft_config["test_dataset"]=str(peft_config["test_dataset"])
     
 
     print("loading the model:")
-    net=load_model(peft_config)
+    net=create_model(peft_config)
     
     #initiallizing the parameters used to save the best scores for eval
     best_f1score=0
@@ -247,7 +59,8 @@ def PEFTTrain ( peft_config):
     model_name=peft_config["model_name"]
 
     net.cuda()
-    print_trainable_parameters(TSViT(TSVIT_config)),print_trainable_parameters(net)
+    # print_trainable_parameters(create_model(TSVIT_config)),
+    print_trainable_parameters(net)
 
     optimizer=torch.optim.Adam(get_trainable_parameters(net),lr=peft_config["lr"]) 
 
@@ -256,7 +69,7 @@ def PEFTTrain ( peft_config):
     
     lossfn=nn.CrossEntropyLoss() if not ("add_dice_loss" in peft_config.keys() and peft_config["add_dice_loss"]) else DiceBCELoss()  
     
-    #creating a directory for the model, where weight will be save, also, saving the onfigurations
+    #creating a directory for the model, where weight will be save, also, saving the configurations
     os.makedirs(f"save_models/{model_name}")
     pickle.dump(peft_config,open(f"save_models/{model_name}/config.pkl","wb"))
     
@@ -308,7 +121,6 @@ def PEFTTrain ( peft_config):
                     yp=net(X)
                     loss=lossfn(yp,y.to(torch.long).cuda())
                     temp_eval_loss.append(loss_and_metrics_multi_class(y.cpu().detach().to(torch.float).numpy(),yp.to(torch.float).cpu().detach().numpy()))
-                    # print(np.array(temp_eval_loss).mean())
             
             eval_loss.append(np.array(temp_eval_loss).mean(axis=0))
             print("eval",epoch,eval_loss[-1])
@@ -426,25 +238,28 @@ if __name__=="__main__":
     
     
 
-    
+    from models.model_loader import MODEL_TYPE
     run_config={
         #providing the dataset
         "train_dataset":train_dataset,
         "test_dataset":test_dataset,
         "eval_dataset":eval_dataset,
         
+        #number of classes in munich dataset is 27
+        "number_of_classes":27,
+
         #possible pefting techniques
-        "model_number":model_type.LORA,
+        "model_number":MODEL_TYPE.LORA,
 
 
         #in adapter, lora, and promt, if true, change token, else, add head layer
         "change_to_token":True,
 
         #must be unique, serves as the neptune custom run id 
-        "model_name":"munich lora 3 3 3 1e-3",
+        "model_name":"munich lora 4-4-4 1e-3",
 
         #initial TSViT model as provided by the model
-        "initial_wait_file":"Initial_TSViT_model.pt",
+        "initial_weight_file":"./Initial_TSViT_weights.pt",
 
         #general hyperparameters
         "lr":1e-3,
@@ -455,9 +270,9 @@ if __name__=="__main__":
         "seed":313,
 
         #LORA hyperparamters
-        "r":3,
-        "rs":3,
-        "rt":3,
+        "r":4,
+        "rs":4,
+        "rt":4,
         
         #Prompt Tuning hyperparameters
         "external":True,
