@@ -1,25 +1,30 @@
-import pickle
 import torch
 from torch import nn
 from torch.utils.data.dataloader import DataLoader
-from TSViT import TSViT
+import numpy as np
+
+import os
+import neptune
+import pickle
+import random
+from tqdm import tqdm
+
+from TSViT import TSViT,Transformer,PreNorm,Attention,FeedForward
 from FTSViT import FTTSViT
 from Token_TSViT import Token_TSViT
 from PromptTuning import PTTSViT
-from util import print_trainable_parameters,get_trainable_parameters,loss_and_metrics_multi_class,F1score
-import numpy as np
-from tqdm import tqdm
-from TSViT import TSViT,Transformer,PreNorm,Attention,FeedForward
-import os
-import neptune
 from adaptformer import AdaptTSViT
-from loraTSViT import LoraTSViT
+
 from BiTTSViT import FBFTSViT,PBFTSViT
 from Adamix import AdamixTSViT
+from loraTSViT import LoraTSViT
+
 import loralib as lora
-import random
+
+from util import print_trainable_parameters,get_trainable_parameters,loss_and_metrics_multi_class,set_seed
 
 from loss import DiceBCELoss
+
 
 TSVIT_config={
         'img_res':24,
@@ -41,9 +46,12 @@ TSVIT_config={
         'ignore_background': False
 }
 
-# model_type=["from_scratch","fine tune full","head_fine_tune","shallow_prompt_tune v2","deep_prompt_tune v2","adapter tune","lora tune"]
 
 class model_type:
+    """
+    This class holds all model types as well as their string format
+    It is like a enum in other languages
+    """
     INITIAL_TSVIT=0
     RANDOM_FTSVIT=1
     HEAD_FTSVIT=2
@@ -80,6 +88,10 @@ class model_type:
 
 
 def load_model(configuration):
+        """
+        This function loads the model by using the configurations given
+        the con
+        """
         net=torch.load(configuration["initial_wait_file"])
         model_number=configuration["model_number"]
         if model_number==model_type.RANDOM_FTSVIT:
@@ -150,7 +162,6 @@ def load_model(configuration):
         elif model_number==model_type.TOKEN_FTTSVIT:
             net1=TSViT(configuration["model_config"])
             net.temporal_token=None
-            # print(net1.load_state_dict(net.state_dict(),strict=False))
             net=net1
             if "full" not in configuration.keys():
                 configuration["full"]=False
@@ -189,51 +200,46 @@ def load_model(configuration):
             net=net1
             net.requires_grad_(False)
             net.set_pt_paramters()     
-        
         return net
 
 
 def test(net,dataset):
-        
-        temp_eval_loss=[]
+        """
+        This code runs the test
+        return the mean of the loss and metric function for all batches
+        """
+        temp_test_loss=[]
         with torch.no_grad():
             net.eval()
             for X,y in tqdm(DataLoader(dataset,batch_size=16,num_workers=2)):
                 with torch.no_grad():
                     X,y=X.cuda(),y.cuda()
                     yp=net(X)
-                    temp_eval_loss.append(loss_and_metrics_multi_class(y.cpu().detach().to(torch.float).numpy(),yp.to(torch.float).cpu().detach().numpy(),criterion=torch.nn.CrossEntropyLoss()))
+                    temp_test_loss.append(loss_and_metrics_multi_class(y.cpu().detach().to(torch.float).numpy(),yp.to(torch.float).cpu().detach().numpy(),criterion=torch.nn.CrossEntropyLoss()))
 
-            test_loss=np.array(temp_eval_loss).mean(axis=0)
+            test_loss=np.array(temp_test_loss).mean(axis=0)
             print("test loss= ",test_loss)
             return test_loss
          
-def set_seed(seed=911):
-    random.seed(seed)
-    os.environ["PYTHONHASHSEED"] = str(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
+
 
 def PEFTTrain ( peft_config):
 
-    set_seed(peft_config["seed"])
+    set_seed(peft_config["seed"])#set seed to reproduce the results
 
     train_loss=[]
     eval_loss=[]
 
-
+    #loading datasets
     train_dataset=peft_config["train_dataset"] 
     eval_dataset=peft_config["eval_dataset"] 
     test_dataset=peft_config["test_dataset"] 
     
+
     print("loading the model:")
     net=load_model(peft_config)
-        
-
+    
+    #initiallizing the parameters used to save the best scores for eval
     best_f1score=0
     best_iou=0
     best_loss=10
@@ -242,36 +248,31 @@ def PEFTTrain ( peft_config):
 
     net.cuda()
     print_trainable_parameters(TSViT(TSVIT_config)),print_trainable_parameters(net)
-    net=net.train()
 
-    optimizer=torch.optim.Adam(get_trainable_parameters(net),lr=peft_config["lr"]) #.parameters()
+    optimizer=torch.optim.Adam(get_trainable_parameters(net),lr=peft_config["lr"]) 
 
     if peft_config["add_scheduler"]:
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2, gamma=0.3162,verbose=True)
     
-    lossfn=nn.CrossEntropyLoss() if not ("add_dice_loss" in peft_config.keys() and peft_config["add_dice_loss"]) else DiceBCELoss() #torch.nn.CrossEntropyLoss() 
-    os.makedirs(f"save_models/{model_name}")#,exist_ok=True
+    lossfn=nn.CrossEntropyLoss() if not ("add_dice_loss" in peft_config.keys() and peft_config["add_dice_loss"]) else DiceBCELoss()  
+    
+    #creating a directory for the model, where weight will be save, also, saving the onfigurations
+    os.makedirs(f"save_models/{model_name}")
     pickle.dump(peft_config,open(f"save_models/{model_name}/config.pkl","wb"))
+    
+    #if neptune is True, initialize the connection and load the configuration
     if run_config["do_neptune"]:
         run=neptune.init_run(project=run_config["project_name"],
         api_token=run_config["api_token"],
         name=model_name,
         custom_run_id=model_name)
-        hyperparams={
-                "learning rate":peft_config["lr"],
-                "scheduler drop":"radical 10 per 2 epochs" if peft_config["add_scheduler"] else "constant",
-                "model name":model_name,
-                "technique":model_type.to_string(model_type,peft_config["model_number"]),
-                "trainable parameters": print_trainable_parameters(net)[0],
-                "total number of parameters":print_trainable_parameters(net)[1],
-                "percentange of trainable parameters": print_trainable_parameters(net)[2],
-                "additional parameters":print_trainable_parameters(net)[1]-print_trainable_parameters(TSViT(TSVIT_config))[1],
-        }
-        run["hyperparameters"] = hyperparams
         run["configuration"] = peft_config
-    net.train()
+    
+    
     print("starting training")
+    
     for epoch in range(peft_config["number_of_epochs"]):
+        net.train()
         train_loss=[]
         loader=tqdm(DataLoader(train_dataset,batch_size=16, num_workers=2,shuffle=True))
         for X,y in loader:
@@ -331,9 +332,7 @@ def PEFTTrain ( peft_config):
                         best_loss=eval_loss[-1][3]
                         torch.save(net.state_dict(),f"save_models/{model_name}/best_f1score.pt")
                         
-            # if run_config["do_neptune"]:
-            #     run["validation/epoch/loss"].log(eval_loss[-1])
-            net.train()
+
             if peft_config["add_scheduler"]:
                         scheduler.step()
                         
@@ -341,7 +340,7 @@ def PEFTTrain ( peft_config):
 
 
     print("starting testing")
-    print("testing final epoch")
+    print("testing model  final epoch")
     test_loss_last =test(net,test_dataset)
     if run_config["do_neptune"]:
         run["test/last_epoch/loss"]=(test_loss_last[0])
@@ -350,7 +349,7 @@ def PEFTTrain ( peft_config):
         run["test/last_epoch/f1score"]=(test_loss_last[3])
 
 
-    print("testing best eval f1 score")
+    print("testing model with best eval f1-score")
     net.load_state_dict(torch.load(f"save_models/{model_name}/best_f1score.pt"))
     
     test_loss_best_f1 =test(net,test_dataset) 
@@ -360,7 +359,7 @@ def PEFTTrain ( peft_config):
         run["test/best_f1/iou"]=(test_loss_best_f1[2])
         run["test/best_f1/f1score"]=(test_loss_best_f1[3])
 
-    print("testing best eval loss")
+    print("testing model with best eval loss")
     net.load_state_dict(torch.load(f"save_models/{model_name}/best_loss.pt"))
     test_loss_best_f1 =test(net,test_dataset)
     if run_config["do_neptune"]:
@@ -376,7 +375,7 @@ def PEFTTrain ( peft_config):
 
 
 if __name__=="__main__":
-    my_config={
+    my_TSViT_config={
         'img_res':24,
         'patch_size':2,
         'num_classes':27,
@@ -395,29 +394,37 @@ if __name__=="__main__":
         'scale_dim':4,
         'ignore_background': False
         }
+    
     from munich_dataset import munich_dataset
     from config import NEPTUNE_API_TOKEN,PROJECT_NAME,PROCCESSED_DATA_PATH
-
     base_path=PROCCESSED_DATA_PATH
+
+    #get the tile id from the file name
     def get_tile(name):
         return name.split("_")[1]
-    datalist=[a for a in  os.listdir(base_path)]
-    train_path="original_dist/train_fold0.tileids"
-    with open(train_path,"r") as f:
-        train_id=f.read().split("\n")
-    train_datalist=[a for a in datalist if get_tile(a) in train_id]
-    test_path="original_dist/test_fold0.tileids"
-    with open(test_path,"r") as f:
-        test_id=f.read().split("\n")
-    test_datalist=[a for a in datalist if get_tile(a) in test_id]
-    eval_path="original_dist/eval.tileids"
-    with open(eval_path,"r") as f:
-        eval_id=f.read().split("\n")
-    eval_datalist=[a for a in datalist if get_tile(a) in eval_id]
-
+    #get all tiles that have the id as on the list of ids in the original split testfile
+    def get_tiles_from_split(tile_list,path):
+        with open(path,"r") as f:
+            ids=f.read().split("\n")
+            return [a for a in tile_list if get_tile(a) in ids]
+    
+    #all the ids availabe in the datapath
+    tile_list=[a for a in  os.listdir(base_path)]
+    
+    #extracting the training dataset
+    train_datalist=get_tiles_from_split(tile_list,"original_dist/train_fold0.tileids")
     train_dataset=munich_dataset(base_path,train_datalist)
+
+    #extracting the eval dataset
+    eval_datalist=get_tiles_from_split(tile_list,"original_dist/eval.tileids")
     eval_dataset=munich_dataset(base_path,eval_datalist)
+    
+    #extracting the test dataset
+    test_datalist=get_tiles_from_split(tile_list,"original_dist/test_fold0.tileids")
     test_dataset=munich_dataset(base_path,test_datalist)
+    
+    
+    
 
     
     run_config={
@@ -427,13 +434,14 @@ if __name__=="__main__":
         "eval_dataset":eval_dataset,
         
         #possible pefting techniques
-        "model_number":model_type.ADAMIXTSVIT,
+        "model_number":model_type.LORA,
+
 
         #in adapter, lora, and promt, if true, change token, else, add head layer
         "change_to_token":True,
 
         #must be unique, serves as the neptune custom run id 
-        "model_name":"tesyibgss3dds3",
+        "model_name":"munich lora 3 3 3 1e-3",
 
         #initial TSViT model as provided by the model
         "initial_wait_file":"Initial_TSViT_model.pt",
@@ -447,9 +455,9 @@ if __name__=="__main__":
         "seed":313,
 
         #LORA hyperparamters
-        "r":1,
-        "rs":1,
-        "rt":2,
+        "r":3,
+        "rs":3,
+        "rt":3,
         
         #Prompt Tuning hyperparameters
         "external":True,
@@ -462,12 +470,12 @@ if __name__=="__main__":
 
         #Token Tune Parameters
         "all_tokens":True, #in token extended, if true train all tokens, else, train 8 tokens (27 from munich -  19 from PASTIS)
-        "model_config":my_config,
+        "model_config":my_TSViT_config,
         "full":True,#if full = true, train all paramters else, train token only
         
         
-        #Neptune settings
-        "do_neptune":False,
+        #Neptune settings 
+        "do_neptune":True,
         "project_name":PROJECT_NAME, #fix in config
         "api_token":NEPTUNE_API_TOKEN , #fix in config
     }
