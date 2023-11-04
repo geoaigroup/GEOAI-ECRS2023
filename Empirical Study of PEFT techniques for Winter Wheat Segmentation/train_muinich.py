@@ -8,9 +8,9 @@ import neptune
 import pickle
 from tqdm import tqdm
 
-from models.model_loader import create_model
-from util import print_trainable_parameters,get_trainable_parameters,loss_and_metrics_multi_class,set_seed
-from loss import DiceBCELoss
+from models.model_loader import create_model,MODEL_TYPE
+from utils.util import print_trainable_parameters,get_trainable_parameters,loss_and_metrics_multi_class,set_seed
+from utils.loss import DiceBCELoss
 
 def test(net,dataset):
         """
@@ -35,6 +35,8 @@ def test(net,dataset):
 def PEFTTrain ( peft_config):
 
     set_seed(peft_config["seed"])#set seed to reproduce the results
+
+    peft_config["technique"]=MODEL_TYPE().to_string(peft_config["model_number"])
 
     train_loss=[]
     eval_loss=[]
@@ -74,9 +76,9 @@ def PEFTTrain ( peft_config):
     pickle.dump(peft_config,open(f"save_models/{model_name}/config.pkl","wb"))
     
     #if neptune is True, initialize the connection and load the configuration
-    if run_config["do_neptune"]:
-        run=neptune.init_run(project=run_config["project_name"],
-        api_token=run_config["api_token"],
+    if peft_config["do_neptune"]:
+        run=neptune.init_run(project=peft_config["project_name"],
+        api_token=peft_config["api_token"],
         name=model_name,
         custom_run_id=model_name)
         run["configuration"] = peft_config
@@ -103,7 +105,7 @@ def PEFTTrain ( peft_config):
             loader.set_description(str(train_loss[-1]))
         train_loss=np.array(train_loss).mean(axis=0)
         print(train_loss)
-        if run_config["do_neptune"]:        
+        if peft_config["do_neptune"]:        
                 run["train/batch/loss"].log(train_loss[0])
                 run["train/batch/acc"].log(train_loss[1])
                 run["train/batch/iou"].log(train_loss[2])
@@ -124,7 +126,7 @@ def PEFTTrain ( peft_config):
             
             eval_loss.append(np.array(temp_eval_loss).mean(axis=0))
             print("eval",epoch,eval_loss[-1])
-            if run_config["do_neptune"]:        
+            if peft_config["do_neptune"]:        
                 run["eval/batch/loss"].log(eval_loss[-1][0])
                 run["eval/batch/acc"].log(eval_loss[-1][1])
                 run["eval/batch/iou"].log(eval_loss[-1][2])
@@ -154,7 +156,7 @@ def PEFTTrain ( peft_config):
     print("starting testing")
     print("testing model  final epoch")
     test_loss_last =test(net,test_dataset)
-    if run_config["do_neptune"]:
+    if peft_config["do_neptune"]:
         run["test/last_epoch/loss"]=(test_loss_last[0])
         run["test/last_epoch/acc"]=(test_loss_last[1])
         run["test/last_epoch/iou"]=(test_loss_last[2])
@@ -165,7 +167,7 @@ def PEFTTrain ( peft_config):
     net.load_state_dict(torch.load(f"save_models/{model_name}/best_f1score.pt"))
     
     test_loss_best_f1 =test(net,test_dataset) 
-    if run_config["do_neptune"]:
+    if peft_config["do_neptune"]:
         run["test/best_f1/loss"]=(test_loss_best_f1[0])
         run["test/best_f1/acc"]=(test_loss_best_f1[1])
         run["test/best_f1/iou"]=(test_loss_best_f1[2])
@@ -174,14 +176,14 @@ def PEFTTrain ( peft_config):
     print("testing model with best eval loss")
     net.load_state_dict(torch.load(f"save_models/{model_name}/best_loss.pt"))
     test_loss_best_f1 =test(net,test_dataset)
-    if run_config["do_neptune"]:
+    if peft_config["do_neptune"]:
         run["test/best_loss/loss"]=(test_loss_best_f1[0])
         run["test/best_loss/acc"]=(test_loss_best_f1[1])
         run["test/best_loss/iou"]=(test_loss_best_f1[2])
         run["test/best_loss/f1score"]=(test_loss_best_f1[3])
 
 
-    if run_config["do_neptune"]:
+    if peft_config["do_neptune"]:
         run.stop()
 
 
@@ -207,7 +209,7 @@ if __name__=="__main__":
         'ignore_background': False
         }
     
-    from munich_dataset import munich_dataset
+    from datasets_class.munich_dataset import munich_dataset
     from config import NEPTUNE_API_TOKEN,PROJECT_NAME,PROCCESSED_DATA_PATH
     base_path=PROCCESSED_DATA_PATH
 
@@ -290,7 +292,7 @@ if __name__=="__main__":
         
         
         #Neptune settings 
-        "do_neptune":True,
+        "do_neptune":False,
         "project_name":PROJECT_NAME, #fix in config
         "api_token":NEPTUNE_API_TOKEN , #fix in config
     }

@@ -23,7 +23,7 @@ if __name__=="__main__":
         'ignore_background': False
         }
     
-    from munich_dataset import munich_dataset
+    from datasets_class.munich_dataset import munich_dataset
     from config import NEPTUNE_API_TOKEN,PROJECT_NAME,PROCCESSED_DATA_PATH
     base_path=PROCCESSED_DATA_PATH
 
@@ -60,26 +60,27 @@ if __name__=="__main__":
         "train_dataset":train_dataset,
         "test_dataset":test_dataset,
         "eval_dataset":eval_dataset,
+        "location":"Munich",
         
         #number of classes in munich dataset is 27
         "number_of_classes":27,
 
         #possible pefting techniques
-        "model_number":MODEL_TYPE.LORA,
+        "model_number":MODEL_TYPE.PARTIAL_BIT_TUNE,
 
 
-        #in adapter, lora, and promt, if true, change token, else, add head layer
+        #in adapter, lora, Bit, and promt, if true, change token, else, add head layer
         "change_to_token":True,
 
         #must be unique, serves as the neptune custom run id 
-        "model_name":"munich lora 4-4-4 1e-3",
+        "model_name":"bitsy",
 
         #initial TSViT model as provided by the model
         "initial_weight_file":"./Initial_TSViT_weights.pt",
 
         #general hyperparameters
         "lr":1e-3,
-        "number_of_epochs":40,
+        "number_of_epochs":20,
         "add_scheduler":False,
         "vertical_flip":False,
         "horizontal_flip":False,
@@ -106,8 +107,9 @@ if __name__=="__main__":
         
         
         #Neptune settings 
-        "do_neptune":True,
+        "do_neptune":False,
         "project_name":PROJECT_NAME, #fix in config
         "api_token":NEPTUNE_API_TOKEN , #fix in config
     }
+
     train_muinich.PEFTTrain(run_config)
