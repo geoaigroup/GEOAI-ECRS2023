@@ -7,11 +7,16 @@ from .FTSViT import FTTSViT
 from .Token_TSViT import Token_TSViT
 from .PromptTuning import PTTSViT
 from .adaptformer import AdaptTSViT
-from .BiTTSViT import FBFTSViT,PBFTSViT
+from .BiTTSViT import BitFTSViT
 from .Adamix import AdamixTSViT
 from .loraTSViT import LoraTSViT
 
-from munich_dataset import munich_dataset
+import sys
+sys.path.append("..")
+
+from datasets_class.munich_dataset import munich_dataset
+
+
 
 TSVIT_config={
         'img_res':24,
@@ -75,11 +80,12 @@ def create_model(configuration):
     This function create a model for training by using the configurations given
     the configurations
     """
-    net=TSViT(TSVIT_config)
+    tempTSViTConfig=TSVIT_config.copy()
+    net=TSViT(tempTSViTConfig)
     net.load_state_dict(torch.load(configuration["initial_weight_file"]))
     model_number=configuration["model_number"]
     if model_number==MODEL_TYPE.RANDOM_FTSVIT:
-        net=FTTSViT(TSViT(TSVIT_config),number_of_classes=configuration["number_of_classes"])
+        net=FTTSViT(TSViT(tempTSViTConfig),number_of_classes=configuration["number_of_classes"])
         net.requires_grad_(True)
     elif model_number==MODEL_TYPE.FULL_FTSVIT:
         net=FTTSViT(net,number_of_classes=configuration["number_of_classes"])
@@ -93,9 +99,9 @@ def create_model(configuration):
         if "external" not in configuration.keys():
             configuration["external"]=True
         if configuration["change_to_token"]:
-            TSVIT_config["num_classes"]=configuration["number_of_classes"]
+            tempTSViTConfig["num_classes"]=configuration["number_of_classes"]
         
-        net1=PTTSViT(TSVIT_config,model_number==MODEL_TYPE.DEEP_PTTSViT,configuration["temporal_prompt_dim"],configuration["spatial_prompt_dim"],configuration["external"])
+        net1=PTTSViT(tempTSViTConfig,model_number==MODEL_TYPE.DEEP_PTTSViT,configuration["temporal_prompt_dim"],configuration["spatial_prompt_dim"],configuration["external"])
         
         if configuration["change_to_token"]:
             net.temporal_token=None
@@ -107,8 +113,8 @@ def create_model(configuration):
             net.mlp_change=nn.Identity()
     elif model_number==MODEL_TYPE.ADAPTSViT:
         if configuration["change_to_token"]:
-            TSVIT_config["num_classes"]=configuration["number_of_classes"]
-        net1=AdaptTSViT(TSVIT_config,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"],number_of_classes=configuration["number_of_classes"])
+            tempTSViTConfig["num_classes"]=configuration["number_of_classes"]
+        net1=AdaptTSViT(tempTSViTConfig,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"],number_of_classes=configuration["number_of_classes"])
         if configuration["change_to_token"]:
             net.temporal_token=None
         net1.load_state_dict(net.state_dict(),strict=False)
@@ -125,10 +131,10 @@ def create_model(configuration):
         if "rs" not in configuration.keys():
             configuration["rs"]=None
         if configuration["change_to_token"]:
-            TSVIT_config["num_classes"]=configuration["number_of_classes"]
+            tempTSViTConfig["num_classes"]=configuration["number_of_classes"]
             net.temporal_token=None
             
-        net1=LoraTSViT(TSVIT_config,r=configuration["r"],rt=configuration["rt"],rs=configuration["rs"],number_of_classes=configuration["number_of_classes"])
+        net1=LoraTSViT(tempTSViTConfig,r=configuration["r"],rt=configuration["rt"],rs=configuration["rs"],number_of_classes=configuration["number_of_classes"])
         net1.load_state_dict(net.state_dict(),strict=False)
         lora.mark_only_lora_as_trainable(net1)
         net=net1
@@ -154,26 +160,24 @@ def create_model(configuration):
         net.requires_grad_(False)
         net.temporal_token.requires_grad_(configuration["all_tokens"])
         net.temporal_token1.requires_grad_(True)
-    elif model_number==MODEL_TYPE.FULL_BIT_TUNE:
-        net1=FBFTSViT(model_config=TSVIT_config)
-        for param in net1.parameters():
-            if(param.requires_grad==False):
-                   param.requires_grad=True
-            else:
-                   param.requires_grad=False
-        print(net1.load_state_dict(net.state_dict(),strict=False))
+    elif model_number==MODEL_TYPE.FULL_BIT_TUNE or model_number==MODEL_TYPE.PARTIAL_BIT_TUNE:
+
+        if configuration["change_to_token"]:
+            tempTSViTConfig["num_classes"]=configuration["number_of_classes"]
+            net.temporal_token=None
+
+        net1=BitFTSViT(model_config=tempTSViTConfig,number_of_classes=configuration["number_of_classes"])
+        net1.requires_grad_(False)
+        net1.set_bias_grad(True,model_number==MODEL_TYPE.FULL_BIT_TUNE)
+        net1.load_state_dict(net.state_dict(),strict=False)
         net=net1
-    elif model_number==MODEL_TYPE.PARTIAL_BIT_TUNE:
-        net1=PBFTSViT(model_config=TSVIT_config)
-        for param in net1.parameters():
-            if(param.requires_grad==False):
-                   param.requires_grad=True
-            else:
-                   param.requires_grad=False
-        net1.load_state_dict(net.state_dict(),strict=False)            
-        net=net1
+
+        if configuration["change_to_token"]:
+            net.mlp_change=nn.Identity()
+            net.temporal_token=nn.Parameter(torch.randn(1, configuration["number_of_classes"], 128))
+
     elif model_number==MODEL_TYPE.ADAMIXTSVIT:
-        net1=AdamixTSViT(TSVIT_config,model_number==4,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"])
+        net1=AdamixTSViT(tempTSViTConfig,model_number==4,configuration["temporal_adapter_dim"],configuration["spatial_adapter_dim"])
         net1.load_state_dict(net.state_dict(),strict=False)
         net=net1
         net.requires_grad_(False)
