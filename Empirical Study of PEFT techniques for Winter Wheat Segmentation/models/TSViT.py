@@ -77,9 +77,7 @@ class Transformer(nn.Module):
 
 class TSViT(nn.Module):
     """
-    Temporal-Spatial ViT5 (used in main results, section 4.3)
-    For improved training speed, this implementation uses a (365 x dim) temporal position encodings indexed for
-    each day of the year. Use TSViT_lookup for a slower, yet more general implementation of lookup position encodings
+    Temporal-Spatial ViTs  copied from the work "ViTS for SITS"
     """
     def __init__(self, model_config):
         super().__init__()
@@ -124,39 +122,23 @@ class TSViT(nn.Module):
     def forward(self, x):
         x = x.permute(0, 1, 4, 2, 3)
         B, T, C, H, W = x.shape
-
         xt = x[:, :, -1, 0, 0]
         x = x[:, :, :-1]
         xt = (xt * 365.0001).to(torch.int64)
         xt = F.one_hot(xt, num_classes=366).to(torch.float32)
-        
-        # print(xt.shape)
-        
         xt = xt.reshape(-1, 366)
-        # print(xt.size())
         temp1=self.to_temporal_embedding_input(xt)
-        # print(temp1.size())
         temporal_pos_embedding = temp1.reshape(B, T, self.dim)
         x = self.to_patch_embedding(x)
         x = x.reshape(B, -1, T, self.dim)
-        # print(x.size())
         x += temporal_pos_embedding.unsqueeze(1)
-        # print(x.size())
         x = x.reshape(-1, T, self.dim)
-        cls_temporal_tokens = repeat(self.temporal_token, '() N d -> b N d', b=B * self.num_patches_1d ** 2)#b=B*h*w
-        # print(x.size())
-        x = torch.cat((cls_temporal_tokens, x), dim=1) #(b*h*w, token+T,dim)
-        # print(x.size())
-        x = self.temporal_transformer(x)#(b*h*w, token+T,dim)
-        # print(x.size())
-
-        
-        x = x[:, :self.num_classes]#(b*h*w, token ,dim)
-        
-        
-        # print(x.size())
+        cls_temporal_tokens = repeat(self.temporal_token, '() N d -> b N d', b=B * self.num_patches_1d ** 2)
+        x = torch.cat((cls_temporal_tokens, x), dim=1) 
+        x = self.temporal_transformer(x) 
+        x = x[:, :self.num_classes]
         x = x.reshape(B, self.num_patches_1d**2, self.num_classes, self.dim).permute(0, 2, 1, 3).reshape(B*self.num_classes, self.num_patches_1d**2, self.dim)
-        x += self.space_pos_embedding#[:, :, :(n + 1)]
+        x += self.space_pos_embedding
         x = self.dropout(x)
         x = self.space_transformer(x)
         x = self.mlp_head(x.reshape(-1, self.dim))

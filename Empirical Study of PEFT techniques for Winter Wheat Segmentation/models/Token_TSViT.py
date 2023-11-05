@@ -9,9 +9,7 @@ from .TSViT import FeedForward,Transformer,Attention
 
 class Token_TSViT(nn.Module):
     """
-    Temporal-Spatial ViT5 (used in main results, section 4.3)
-    For improved training speed, this implementation uses a (365 x dim) temporal position encodings indexed for
-    each day of the year. Use TSViT_lookup for a slower, yet more general implementation of lookup position encodings
+
     """
     def __init__(self, model_config):
         super().__init__()

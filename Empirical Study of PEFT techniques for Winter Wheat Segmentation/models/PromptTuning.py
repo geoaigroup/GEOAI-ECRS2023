@@ -19,9 +19,7 @@ class PromptAttention(nn.Module):
                
          
                 self.prompt_v=nn.Parameter(torch.randn(1, heads,prompt_dim ,dim_head ))
-                self.prompt_k=nn.Parameter(torch.randn(1, heads,prompt_dim ,dim_head ))
-          # 
-        
+                self.prompt_k=nn.Parameter(torch.randn(1, heads,prompt_dim ,dim_head ))  
 
         inner_dim = dim_head * heads
         project_out = not (heads == 1 and dim_head == dim)
@@ -45,8 +43,8 @@ class PromptAttention(nn.Module):
                 self.prompt_k.requires_grad_(True)
     def forward(self, x):
         if self.add_prompt and self.external: 
-          prompt_expanded = repeat(self.prompt, '() N d -> b N d', b=x.shape[0])#added
-          x = torch.cat((x,prompt_expanded), dim=1) #added
+          prompt_expanded = repeat(self.prompt, '() N d -> b N d', b=x.shape[0])
+          x = torch.cat((x,prompt_expanded), dim=1) 
 
         b, n, _, h = *x.shape, self.heads
         qkv = self.to_qkv(x).chunk(3, dim=-1)
@@ -54,12 +52,12 @@ class PromptAttention(nn.Module):
         q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h=h), qkv)
 
         if self.add_prompt and not self.external:
-          prompt_v_expanded = repeat(self.prompt_v, '() h N d -> b h N d', b=b)#added
+          prompt_v_expanded = repeat(self.prompt_v, '() h N d -> b h N d', b=b)
           prompt_k_expanded = repeat(self.prompt_k, '() h N d -> b h N d', b=b)
           
           
-          v = torch.cat((v,prompt_v_expanded), dim=2) #added
-          k = torch.cat((k,prompt_k_expanded), dim=2) #added
+          v = torch.cat((v,prompt_v_expanded), dim=2) 
+          k = torch.cat((k,prompt_k_expanded), dim=2) 
 
         # print(q.shape, k.shape, v.shape)
 
@@ -124,7 +122,7 @@ class PTTSViT(nn.Module):
         self.scale_dim = model_config['scale_dim']
         assert self.pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
         num_patches = self.num_patches_1d ** 2
-        patch_dim = (model_config['num_channels'] - 1) * self.patch_size ** 2  # -1 is set to exclude time feature
+        patch_dim = (model_config['num_channels'] - 1) * self.patch_size ** 2  
         self.to_patch_embedding = nn.Sequential(
             Rearrange('b t c (h p1) (w p2) -> (b h w) t (p1 p2 c)', p1=self.patch_size, p2=self.patch_size),
             nn.Linear(patch_dim, self.dim),)
@@ -140,8 +138,8 @@ class PTTSViT(nn.Module):
             nn.Linear(self.dim, self.patch_size**2)
         )
 
-        self.mlp_head.requires_grad_(True)#added
-        self.mlp_change=nn.Linear(in_features=self.num_classes,out_features=1)#added
+        self.mlp_head.requires_grad_(True)
+        self.mlp_change=nn.Linear(in_features=self.num_classes,out_features=1)
 
     def set_pt_paramters(self):
       
@@ -158,39 +156,19 @@ class PTTSViT(nn.Module):
         x = x[:, :, :-1]
         xt = (xt * 365.0001).to(torch.int64)
         xt = F.one_hot(xt, num_classes=366).to(torch.float32)
-        
-        # print(xt.shape)
-        
         xt = xt.reshape(-1, 366)
-        # print(xt.size())
         temp1=self.to_temporal_embedding_input(xt)
-
-        # temp2=self.to_temporal_embedding_input_pt(xt)#added
-
-        # print(temp1.size())
         temporal_pos_embedding = temp1.reshape(B, T, self.dim)
-
-        # temporal_pos_embedding_pt=temp2.reshape(B,T,self.dim)#added
-
         x = self.to_patch_embedding(x)
         x = x.reshape(B, -1, T, self.dim)
-        x += temporal_pos_embedding.unsqueeze(1)#+temporal_pos_embedding_pt.unsqueeze(1)
+        x += temporal_pos_embedding.unsqueeze(1)
         x = x.reshape(-1, T, self.dim)
         cls_temporal_tokens = repeat(self.temporal_token, '() N d -> b N d', b=B * self.num_patches_1d ** 2)
-
-        # cls_temporal_tokens_pt = repeat(self.temporal_token_pt, '() N d -> b N d', b=B * self.num_patches_1d ** 2)#added
-
-        # cls_spatial_tokens_pt = repeat(self.temporal_token_pt, '() N d -> b N d', b=B * self.num_classes )#added
-
-        x = torch.cat((cls_temporal_tokens, x), dim=1)#cls_temporal_tokens_pt,
+        x = torch.cat((cls_temporal_tokens, x), dim=1)
         x = self.temporal_transformer(x)
         x = x[:, :self.num_classes]
         x = x.reshape(B, self.num_patches_1d**2, self.num_classes, self.dim).permute(0, 2, 1, 3).reshape(B*self.num_classes, self.num_patches_1d**2, self.dim)
-
-
-
-        x += self.space_pos_embedding #+self.space_pos_embedding_pt #[:, :, :(n + 1)]
-        
+        x += self.space_pos_embedding 
         x = self.dropout(x)
         x = self.space_transformer(x)
         x = self.mlp_head(x.reshape(-1, self.dim))
