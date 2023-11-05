@@ -28,7 +28,20 @@ Adapted Sobol         |          Unoise model
 
 ## Getting Started
 
+===> For all what follows, fix the paths relative to your system.
+
 ### Adapted Sobol application on WHU segmentation model
+
+- Run Sobol_WHU/pytorch_example-WHU.ipynb. It applies the adapted sobol on a set of WHU dataset images. You con modify the code in SObol_WHU/sobol_attribution_method/torch_explainer.py to visualize intermediate results.
+
+- The notebook saves the saliency maps produced by Adapted Sobol method, which you should copy and paste in NoiseTraining-WHU. It is needed when comparing between Adapted  Sobol and CAM++.
+
+### Evaluating XAI methods with Noise model.
+
+- NoiseTraining-WHU\train.py was used to train a noise model over the WHU building segmentation model.
+- NoiseTraining-WHU\Unoise_eval_method.ipynb is used to inference the noise model and visualize the results of Unoise model as XAI method.
+- NoiseTraining-WHU\Unoise_eval_noise_count.ipynb is used to compare between CAM and CAM++ using Unoise model as evaluation method.
+- NoiseTraining-WHU\Unoise_eval_noise_count_sobol.ipynb is used to compare between Sobol and CAM++ using the Unoise model as evaluation method.
 
 
 ## Datasets
