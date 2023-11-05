@@ -17,9 +17,10 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 
 
 ## Some visual results
+-Munich:
 
-
-
+-Lebanon:
+![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
 
 
 ## Getting Started
