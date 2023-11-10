@@ -18,13 +18,13 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 
 
 ## Some visual results
--Munich:
+* Munich:
 
 
 ![image](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Empirical%20Study%20of%20PEFT%20techniques%20for%20Winter%20Wheat%20Segmentation/images/Munich%20Results.png)
 
 
--Lebanon:
+* Lebanon:
 
 
 ![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
@@ -33,13 +33,15 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 ## Getting Started
 
 Munich 480 dataset:
-1. download the Munich dataset 
-2. unzip the file in "Munich480" directory
-3. run preporcess_munich.py
+1. [Download](https://www.kaggle.com/datasets/artelabsuper/sentinel2-munich480) the Munich dataset 
+2. Unzip the file in "Munich480" directory
+3. Run preporcess_munich.py
 4. change the "run_config" from train_munich.py or run.py and run the file
 
 
+**Beqaa-Lebanon dataset will be made available soon!**
 
-## Datasets
-1. Lebanese Dataset (Will be available later on)
-2. Munich Dataset : https://www.kaggle.com/datasets/artelabsuper/sentinel2-munich480
+## Contact
+Feel free to reach to us via below link or through aghandour at cnrs.edu.lb:
+https://geogroup.ai/#contact
+
