@@ -56,3 +56,6 @@ This paper adapts the recent gradient-free Sobol XAI method for semantic segment
 H. Shreim, A. GIZZINI and A. J. Ghandour, “Trainable Noise Model as an XAI evaluation method: application on Sobol for remote sensing image segmentation”, in 5th International Electronic Conference on Remote Sensing, Nov 17 - Nov 21, 2023.  
 ```
 
+## Contact
+Feel free to reach to us via below link or through aghandour at cnrs.edu.lb:
+https://geogroup.ai/#contact
