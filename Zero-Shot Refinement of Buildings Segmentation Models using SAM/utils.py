@@ -296,4 +296,25 @@ def extract_rep_points(data,new_data):
             
             os.makedirs(f"{new_data}/{sh}",exist_ok=True)
             points.to_file(f'{new_data}/{sh}/{sh}.shp')    
-    
+
+def save_shp(pred_mask,name,output_dir):
+    pred_tile = []
+    msk = pred_mask.int()
+    msk = msk.cpu().numpy()
+    for i in range(msk.shape[0]):
+        batch = msk[i]
+        for b in range(batch.shape[0]):
+            mask_tile = mask_tile + batch[b]
+            pred_tile.append(batch[b])
+
+    polys=[]
+    for k in pred_tile:
+        if not np.any(k):
+            continue
+        polys.append(binary_mask_to_polygon(k))
+
+    gdf = gpd.GeoDataFrame({
+                        'ImageId':name,
+                        'geometry':polys
+                        })
+    gdf.to_file(f"{output_dir}/{name}/{name}.shp")
