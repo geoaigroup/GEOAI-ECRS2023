@@ -165,7 +165,7 @@ class cal_scores:
         #                     'geometry':polys
         #                     })
         # gdf.to_file(f"{self.output_dir}/{name}/{name}.shp")
-        utils.save_shp(pred_mask,name,self.output_dir)
+        utils.save_shp(pred_mask,name,self.output_dir,image.shape[:2])
         plt.figure(figsize=(10, 10))
         plt.imshow(image)
         utils.show_mask(mask_tile, plt.gca(), random_color=False)
