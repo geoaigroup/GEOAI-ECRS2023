@@ -154,18 +154,18 @@ class cal_scores:
         with open(self.score_dir + f'/{name}_score.json', 'w') as f1:
             json.dump(scores_b, f1)
 
-        polys=[]
-        for k in pred_tile:
-            if not np.any(k):
-                continue
-            polys.append(utils.binary_mask_to_polygon(k))
+        # polys=[]
+        # for k in pred_tile:
+        #     if not np.any(k):
+        #         continue
+        #     polys.append(utils.binary_mask_to_polygon(k))
 
-        gdf = gpd.GeoDataFrame({
-                            'ImageId':name,
-                            'geometry':polys
-                            })
-        gdf.to_file(f"{self.output_dir}/{name}/{name}.shp")
-
+        # gdf = gpd.GeoDataFrame({
+        #                     'ImageId':name,
+        #                     'geometry':polys
+        #                     })
+        # gdf.to_file(f"{self.output_dir}/{name}/{name}.shp")
+        utils.save_shp(pred_mask,name,self.output_dir)
         plt.figure(figsize=(10, 10))
         plt.imshow(image)
         utils.show_mask(mask_tile, plt.gca(), random_color=False)
