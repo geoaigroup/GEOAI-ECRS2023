@@ -299,6 +299,7 @@ def extract_rep_points(data,new_data):
 
 def save_shp(pred_mask,name,output_dir):
     pred_tile = []
+    mask_tile = np.zeros(image.shape[:2])
     msk = pred_mask.int()
     msk = msk.cpu().numpy()
     for i in range(msk.shape[0]):
