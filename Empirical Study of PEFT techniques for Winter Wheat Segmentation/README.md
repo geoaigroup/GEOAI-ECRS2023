@@ -6,7 +6,7 @@ Welcome to the official repository for our paper titled "Empirical Study of PEFT
 Paper: [arXiv](https://arxiv.org/pdf/2310.01825v1.pdf)
 
 ## Overview
-Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for the fine tune the TSViT model to the . This repository contains the code and resources used to reproduce the results presented in our paper. 
+Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for the fine tune the TSViT model. This repository contains the code and resources used to reproduce the results presented in our paper. 
 
 
 ## Key Features
