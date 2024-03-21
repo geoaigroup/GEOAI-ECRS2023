@@ -25,12 +25,49 @@ In order to properly run the paper's code, the following packages should be inst
 3. numpy
 4. opencv-python
 5. torch
-6. skimage.io
+6. skimage.io (scikit-image)
 7. rasterio
 8. imageio
 9. matplotlib
 10. ttach 
 11. tqdm
+
+Follow these steps:
+
+1. **Download CUDA 12**: Make sure you have CUDA 12 installed on your system. You can download it from the official NVIDIA website.
+
+2. **Create a Virtual Environment**: Create a virtual environment using Python's venv module. Run the following command:
+
+    ```bash
+    $ python -m venv .venv/eo-xai
+    ```
+    
+3. **Activate the Virtual Environment**: Activate the virtual environment by running the following command:
+
+    ```bash
+    $ source .venv/eo-xai/bin/activate
+    ```
+
+4. **Install IPython Kernel**: Install the IPython kernel to enable running the virtual environment in Jupyter notebooks.
+
+    ```bash
+    $ pip install ipykernel
+    ```
+
+5. **Register the Virtual Environment as a Jupyter Kernel**: Register the virtual environment as a Jupyter kernel named eo-xai to use it in Jupyter notebooks.
+
+    ```bash
+    $ python -m ipykernel install --user --name=eo-xai
+    ```
+
+6. **Install Project Requirements**: Install the necessary libraries by navigating to the project directory and running:
+
+    ```bash
+    $ cd path/to/your/project
+    $ pip install -r requirements.txt
+    ```
+
+Make sure to replace "path/to/your/project" with the actual path to your project directory containing the requirements.txt file.
 
 ## Implementation
 In order to reproduce the reported results, you need simply to go through the grad_cam_extensions.ipynb notebook that executes the following steps in order:
