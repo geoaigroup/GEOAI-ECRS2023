@@ -48,19 +48,7 @@ Follow these steps:
     $ source .venv/eo-xai/bin/activate
     ```
 
-4. **Install IPython Kernel**: Install the IPython kernel to enable running the virtual environment in Jupyter notebooks.
-
-    ```bash
-    $ pip install ipykernel
-    ```
-
-5. **Register the Virtual Environment as a Jupyter Kernel**: Register the virtual environment as a Jupyter kernel named eo-xai to use it in Jupyter notebooks.
-
-    ```bash
-    $ python -m ipykernel install --user --name=eo-xai
-    ```
-
-6. **Install Project Requirements**: Install the necessary libraries by navigating to the project directory and running:
+4. **Install Project Requirements**: Install the necessary libraries by navigating to the project directory and running:
 
     ```bash
     $ cd path/to/your/project
