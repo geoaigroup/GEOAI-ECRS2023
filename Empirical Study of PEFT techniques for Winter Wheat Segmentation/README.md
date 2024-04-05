@@ -27,7 +27,7 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 * Beqaa-Lebanon dataset:
 
 ![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
-![app-gui](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/14883982/bc918eea-5afa-4bf7-9323-90aeea12d393)
+<!-- ![app-gui](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/14883982/bc918eea-5afa-4bf7-9323-90aeea12d393) -->
 
 
 ## Getting Started
