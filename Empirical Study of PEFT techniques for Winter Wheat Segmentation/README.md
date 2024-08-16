@@ -30,6 +30,7 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 
 ## Some visual results
 * Munich 480 dataset:
+  
 ![image](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Empirical%20Study%20of%20PEFT%20techniques%20for%20Winter%20Wheat%20Segmentation/images/Munich%20Results.png)
 
 
