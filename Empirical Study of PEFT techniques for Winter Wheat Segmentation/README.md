@@ -16,20 +16,6 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
   - The PEFT techniques applied on TSViT model.
   - The training code for both Lebanon and Munich dataset.
 
-
-## Some visual results
-* Munich 480 dataset:
-
-
-![image](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Empirical%20Study%20of%20PEFT%20techniques%20for%20Winter%20Wheat%20Segmentation/images/Munich%20Results.png)
-
-
-* Beqaa-Lebanon dataset:
-
-![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
-<!-- ![app-gui](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/14883982/bc918eea-5afa-4bf7-9323-90aeea12d393) -->
-
-
 ## Getting Started
 
 * Munich 480 dataset:
@@ -38,7 +24,19 @@ Our research focuses on the use of Parameter Efficient Fine Tuning (PEFT) for th
 3. Run preporcess_munich.py
 4. change the "run_config" from train_munich.py or run.py and run the file
 
-**Beqaa-Lebanon dataset will be made available soon.**
+* Beqaa-Lebanon dataset:
+1. Dataset [Docuemntation](https://github.com/user-attachments/files/16637950/Lebanese.dataset.documentation-itr1.pdf))
+2. Reach out to us if you need access to this dataset.
+
+## Some visual results
+* Munich 480 dataset:
+![image](https://github.com/geoaigroup/GEOAI-ECRS2023/blob/main/Empirical%20Study%20of%20PEFT%20techniques%20for%20Winter%20Wheat%20Segmentation/images/Munich%20Results.png)
+
+
+* Beqaa-Lebanon dataset:
+![image](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/74465885/8a6569e8-a987-4457-8d5c-3ee6a5d34a72)
+<!-- ![app-gui](https://github.com/geoaigroup/GEOAI-ECRS2023/assets/14883982/bc918eea-5afa-4bf7-9323-90aeea12d393) -->
+
 
 ## Contact
 Feel free to reach to us via below link or through aghandour at cnrs.edu.lb:
